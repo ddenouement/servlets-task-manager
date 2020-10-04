@@ -1,0 +1,9 @@
+.photo {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url('https://img5.goodfon.ru/wallpaper/nbig/0/39/gory-gora-sneg-the-mountains-mountain-snow.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: grey;
+}
