@@ -1,9 +1,9 @@
 package command.impl.admin;
 
 import com.mysql.cj.Session;
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import model.User;
 import service.UserService;
 

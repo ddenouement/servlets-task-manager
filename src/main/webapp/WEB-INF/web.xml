@@ -17,6 +17,14 @@
     <servlet-name>Controller</servlet-name>
     <url-pattern>/controller</url-pattern>
   </servlet-mapping>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error.jsp</location>
+    </error-page>
     <filter>
         <filter-name>ErrorsFilter</filter-name>
         <filter-class>filter.ErrorsFilter</filter-class> <!-- mandatory -->

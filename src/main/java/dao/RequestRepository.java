@@ -15,7 +15,8 @@ public class RequestRepository extends BaseRepository {
     private static final String SQL_FIND_REQUEST_BY_ID = "select * from request where id=?";
 
 
-    private static final String SQL_FIND_ALL_REQUESTS = "select * from request order by created_at desc";
+    private static final String SQL_FIND_COUNT_ALL_REQUESTS = "select count(*) as count from request";
+    private static final String SQL_FIND_ALL_REQUESTS_PAGED = "select * from request order by created_at desc LIMIT limitParam OFFSET offsetParam";
     private static final String SQL_CREATE_REQUEST = "insert into request (status, motif, created_at, id_user, id_user_activity) values (?, ?, ?, ?, ?)";
     private static final String SQL_CREATE_REQUESTED_TASK = "insert into user_activity (id_user, id_activity, progress) values (?, ?, 'REQUESTED') " ;
     private static final String SQL_ADD_USER_TO_ACTIVITY = "update user_activity set progress='ASSIGNED' where id=?";
@@ -64,8 +65,6 @@ public class RequestRepository extends BaseRepository {
             close(pstmt);
             close(con);
         }
-
-
         return found;
     }
 
@@ -79,8 +78,8 @@ public class RequestRepository extends BaseRepository {
                 request.setCreatedAt(time);
             }
             int id_task = rs.getInt("id_user_activity");
-            UserActivity task = UserRepository.getInstance().findTaskById(id_task);
-           String status = rs.getString("status");
+            UserActivity task = UserActivityRepository.getInstance().findTaskById(id_task);
+            String status = rs.getString("status");
             String motif = rs.getString("motif");
             request.setTask(task);
             request.setStatus(status);
@@ -92,14 +91,18 @@ public class RequestRepository extends BaseRepository {
         }
     }
 
-    public List<Request> findAllRequests() {
+
+    public List<Request> findAllRequestsPaged(int limit, int page) {
         List<Request> found = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
         try {
             con = getConnection();
-            pstmt = con.prepareStatement(SQL_FIND_ALL_REQUESTS);
+            String formattedSql =  SQL_FIND_ALL_REQUESTS_PAGED
+                    .replace("limitParam", ""+limit)
+                    .replace("offsetParam", ""+page);
+            pstmt = con.prepareStatement(formattedSql);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 if (found == null) found = new ArrayList<>();
@@ -328,7 +331,7 @@ public class RequestRepository extends BaseRepository {
         ResultSet rs = null;
         try {
             //check if he has unfinished same activity
-            boolean hasUnfinished = UserRepository.getInstance().checkUserHasSameUnfinishedTask(userId,activityId);
+            boolean hasUnfinished = UserActivityRepository.getInstance().checkUserHasSameUnfinishedTask(userId,activityId);
             if(hasUnfinished)
             {
                 rollback(con);
@@ -418,7 +421,7 @@ public class RequestRepository extends BaseRepository {
             setAutoCommit(con,false);
 
             //find requested task
-            UserActivity task = UserRepository.getInstance().findTaskById(taskId);
+            UserActivity task = UserActivityRepository.getInstance().findTaskById(taskId);
             if (task == null) {
                 rollback(con);
                 throw new DaoException("You can not remove a task if you are not assigned to it");
@@ -473,5 +476,27 @@ public class RequestRepository extends BaseRepository {
     }
 
 
-
+    public int getNumRequests() {
+        int cnt = 0;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(SQL_FIND_COUNT_ALL_REQUESTS);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                cnt = rs.getInt("count");
+            }
+            close(rs);
+            close(pstmt);
+            close(con);
+        } catch (SQLException ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING,ex.getLocalizedMessage());
+            close(rs);
+            close(pstmt);
+            close(con);
+        }
+        return cnt;
+    }
 }

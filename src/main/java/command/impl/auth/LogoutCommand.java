@@ -1,6 +1,6 @@
 package command.impl.auth;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
 
 import javax.servlet.ServletException;

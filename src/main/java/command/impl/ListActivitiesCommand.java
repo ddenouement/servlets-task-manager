@@ -1,9 +1,9 @@
 package command.impl;
 
 import com.mysql.cj.Session;
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import dao.ActivityRepository;
 import model.Activity;
 import model.Category;

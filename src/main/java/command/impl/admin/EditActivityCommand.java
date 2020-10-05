@@ -1,8 +1,8 @@
 package command.impl.admin;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import model.Activity;
 import model.Category;
 import model.Progress;
@@ -70,8 +70,7 @@ public class EditActivityCommand implements ICommand {
         Activity activity = ActivityService.getInstance().getActivityById(activityId);
         request.setAttribute("activity", activity);
 
-     //   List<Category> categories = CategoryService.getInstance().getAllCategories();
-        request.setAttribute("categories", Category.values());
+         request.setAttribute("categories", Category.values());
 
 
         return FORWARD_JSP_EDIT_ACTIVITY_PAGE;

@@ -1,7 +1,7 @@
 package controller;
 
 import command.CommandFactory;
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
 
 import javax.enterprise.deploy.shared.ActionType;

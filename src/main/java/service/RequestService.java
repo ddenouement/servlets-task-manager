@@ -21,9 +21,6 @@ public class RequestService {
         return instance;
     }
 
-    public List<Request> getAllRequests() {
-        return dao.findAllRequests();
-    }
 
     public List<Request> getRequestsByUserId(int id) {
         return dao.findAllRequestsByUserId(id);
@@ -56,5 +53,12 @@ public class RequestService {
         } catch (DaoException e) {
             throw new ServiceException(e.getMsg());
         }
+    }
+    public int getNumRequests(){
+        return RequestRepository.getInstance().getNumRequests();
+    }
+
+    public List<Request> getAllRequestsPaged(int limit, int page) {
+        return RequestRepository.getInstance().findAllRequestsPaged(limit, page);
     }
 }

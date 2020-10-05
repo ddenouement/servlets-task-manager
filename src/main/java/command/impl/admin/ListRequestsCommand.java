@@ -1,8 +1,8 @@
 package command.impl.admin;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import model.Request;
 import model.User;
 import service.RequestService;
@@ -33,10 +33,19 @@ public class ListRequestsCommand implements ICommand {
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
         PathUtils.saveCurrentPath(request,response);
 
+        int page = 1;
+        int recordsPerPage = 5;
+        if(request.getParameter("page") != null)
+            page = Integer.parseInt(request.getParameter("page"));
 
-        List<Request> requests = RequestService.getInstance().getAllRequests();
-        HttpSession session = request.getSession(false);
-        session.setAttribute("requests", requests);
+        int offset = (page-1)*recordsPerPage;
+        List<Request> list = RequestService.getInstance().getAllRequestsPaged(recordsPerPage, offset);
+        int numOfRequests = RequestService.getInstance().getNumRequests();
+        int noOfPages = (int) Math.ceil(numOfRequests * 1.0 / recordsPerPage);
+
+        request.setAttribute("requests", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page);
         return REQUESTS_LIST_PAGE_JSP;
     }
 }

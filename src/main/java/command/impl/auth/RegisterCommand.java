@@ -1,8 +1,7 @@
 package command.impl.auth;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import model.Profession;
 import model.User;
 import service.ServiceException;
 import service.UserService;

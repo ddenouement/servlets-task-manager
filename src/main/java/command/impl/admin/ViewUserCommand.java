@@ -1,8 +1,8 @@
 package command.impl.admin;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import model.Request;
 import model.Role;
 import model.User;

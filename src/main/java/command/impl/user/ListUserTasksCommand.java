@@ -1,12 +1,13 @@
 package command.impl.user;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import model.Motif;
 import model.User;
 import model.UserActivity;
 import service.ActivityService;
+import service.TaskService;
 import service.UserService;
 
 import javax.servlet.ServletException;
@@ -32,7 +33,7 @@ public class ListUserTasksCommand implements ICommand {
         }
         request.setAttribute("currentUserId", user_id);
 
-        List<UserActivity> tasks = UserService.getInstance().getTasksByUserId(user_id);
+        List<UserActivity> tasks = TaskService.getInstance().getTasksByUserId(user_id);
         request.setAttribute("tasks", tasks);
 
         String motif = Motif.REMOVE.getName();

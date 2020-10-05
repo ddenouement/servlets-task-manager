@@ -1,8 +1,8 @@
 package command.impl;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

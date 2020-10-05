@@ -1,8 +1,9 @@
 package command.impl.user;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import model.User;
 import service.ServiceException;
+import service.TaskService;
 import service.UserService;
 
 import javax.servlet.ServletException;
@@ -27,7 +28,7 @@ public class FinishMyTaskCommand implements command.ICommand {
             User user  = (User) request.getSession().getAttribute("user");
             if(user !=null ){
                 try {
-                    UserService.getInstance().finishTask(taskId, hoursSpent);
+                    TaskService.getInstance().finishTask(taskId, hoursSpent);
                     request.getSession().setAttribute("infoMessage", "You finished this task successfully");
                 } catch (ServiceException e) {
                     request.getSession().setAttribute("errorMessage", e.getMessage());

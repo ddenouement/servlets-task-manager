@@ -31,6 +31,28 @@
 </div>
 </c:if>
 
+<div style="margin: auto">
+<c:if test="${currentPage != 1}">
+       <a href="controller?command=requests&page=${currentPage - 1}">Previous</a>
+</c:if>
+<table border="1" cellpadding="5" cellspacing="5">
+        <tr>
+            <c:forEach begin="1" end="${noOfPages}" var="i">
+                <c:choose>
+                    <c:when test="${currentPage eq i}">
+                        <td>${i}</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><a href="controller?command=requests&page=${i}">${i}</a></td>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </tr>
+</table>
+<c:if test="${currentPage lt noOfPages}">
+        <td><a href="controller?command=requests&page=${currentPage + 1}">Next</a></td>
+</c:if>
+</div>
 
 
 

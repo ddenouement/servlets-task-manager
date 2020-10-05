@@ -42,23 +42,8 @@ public class UserService {
         return dao.findUserByLogin(login);
     }
 
-    public List<UserActivity> getTasksByActivityByProgress(int activityId, String progress) {
-        return dao.findUsersByActivityByProgress(activityId,progress);
-    }
-
-    public List<UserActivity> getTasksByUserId(int user_id) {
-        return  dao.findTasksByUserId(user_id);
-    }
-
     public User login(String login, String password) {
         return dao.authorizeByPasswordAndLogin(login,password);
     }
 
-    public boolean finishTask(int taskId, int hoursSpent) throws ServiceException {
-        try {
-            return dao.finishTask(taskId, hoursSpent);
-        } catch (DaoException e) {
-            throw new ServiceException(e.getMsg());
-        }
-    }
 }

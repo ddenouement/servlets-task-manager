@@ -1,10 +1,11 @@
 package command.impl;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import model.*;
 import service.ActivityService;
+import service.TaskService;
 import service.UserService;
 
 import javax.servlet.ServletException;
@@ -39,10 +40,9 @@ public class ViewActivityCommand implements ICommand {
         if(filterProgress !=null && !filterProgress.isEmpty()){
               progress = filterProgress;
         }
-        List<UserActivity> activityTasks = UserService.getInstance().getTasksByActivityByProgress(activityId, progress);
+        List<UserActivity> activityTasks = TaskService.getInstance().getTasksByActivityByProgress(activityId, progress);
         request.setAttribute("tasks", activityTasks);
 
-        //List<Progress> progressList = ProgressService.getInstance().getAllProgress();
         request.setAttribute("progresses", Progress.values());
 
         request.setAttribute("filterByProgress", progress);

@@ -1,8 +1,8 @@
 package command.impl.user;
 
-import command.HttpAction;
+import command.util.HttpAction;
 import command.ICommand;
-import command.PathUtils;
+import command.util.PathUtils;
 import model.Motif;
 import model.Request;
 import service.RequestService;
