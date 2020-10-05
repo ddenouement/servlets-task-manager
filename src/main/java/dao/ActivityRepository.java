@@ -210,6 +210,29 @@ public class ActivityRepository extends BaseRepository {
         }
         return found;
     }
+
+    public int getCountActivities() {
+            PreparedStatement pstmt = null;
+            ResultSet rs = null;
+            Connection con = null;
+            int res = 0;
+            try {
+                con = getConnection();
+                pstmt = con.prepareStatement(QueriesTask.SQL_GET_NUM_ACTIVITIES);
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    res = rs.getInt("count");
+                }
+            } catch (SQLException ex) {
+                Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            } finally {
+                close(rs);
+                close(pstmt);
+                close(con);
+            }
+            return res;
+        }
+
 }
 
 

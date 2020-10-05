@@ -1,6 +1,7 @@
 package dao;
 
 import model.*;
+import util.QueriesRequest;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -12,26 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RequestRepository extends BaseRepository {
-    private static final String SQL_FIND_REQUEST_BY_ID = "select * from request where id=?";
-
-
-    private static final String SQL_FIND_COUNT_ALL_REQUESTS = "select count(*) as count from request";
-    private static final String SQL_FIND_ALL_REQUESTS_PAGED = "select * from request order by created_at desc LIMIT limitParam OFFSET offsetParam";
-    private static final String SQL_CREATE_REQUEST = "insert into request (status, motif, created_at, id_user, id_user_activity) values (?, ?, ?, ?, ?)";
-    private static final String SQL_CREATE_REQUESTED_TASK = "insert into user_activity (id_user, id_activity, progress) values (?, ?, 'REQUESTED') " ;
-    private static final String SQL_ADD_USER_TO_ACTIVITY = "update user_activity set progress='ASSIGNED' where id=?";
-    private static final String SQL_REMOVE_UER_FROM_ACTIVITY = "update user_activity set progress='CANCELLED' where id=?";
-    private static final String SQL_CHECK_SAME_REQUESTS = "SELECT request.id from request where   EXISTS ( SELECT  request.id \n" +
-            "                FROM request inner join user_activity on (request.id_user_activity=user_activity.id) \n" +
-            "                WHERE user_activity.id_user =? and user_activity.id_activity=? and (status='CREATED' or status='ASSIGNED') )";
-    private static String SQL_FIND_REQUESTS_BY_USER = "select * from request where id_user=? order by created_at desc";
-    private static final String SQL_CHECK_TASK_STATUS_ASSIGNED = "  SELECT  id FROM user_activity  WHERE  id=? and progress='ASSIGNED'";
-    private static final String SQL_UPDATE_REQUEST_STATUS_BASED_ON_CURRENT_STATUS = "" +
-            "UPDATE   request  SET status=? WHERE  status=? AND id=?";
-    private static final String SQL_SET_TASK_CANCELLED_IF_IS_NOT_FINISHED = "" +
-            "UPDATE   user_activity  SET progress='CANCELLED' where id=?";
-
-    private RequestRepository() {
+     private RequestRepository() {
         super();
     }
 
@@ -48,7 +30,7 @@ public class RequestRepository extends BaseRepository {
         Connection con = null;
         try {
             con = getConnection();
-            pstmt = con.prepareStatement(SQL_FIND_REQUESTS_BY_USER);
+            pstmt = con.prepareStatement(QueriesRequest.SQL_FIND_REQUESTS_BY_USER);
             pstmt.setInt(1, userId);
             rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -99,7 +81,7 @@ public class RequestRepository extends BaseRepository {
         Connection con = null;
         try {
             con = getConnection();
-            String formattedSql =  SQL_FIND_ALL_REQUESTS_PAGED
+            String formattedSql =  QueriesRequest.SQL_FIND_ALL_REQUESTS_PAGED
                     .replace("limitParam", ""+limit)
                     .replace("offsetParam", ""+page);
             pstmt = con.prepareStatement(formattedSql);
@@ -133,7 +115,7 @@ public class RequestRepository extends BaseRepository {
             con = getConnection();
             con.setAutoCommit(false);
             //update request status
-            st = con.prepareStatement(SQL_UPDATE_REQUEST_STATUS_BASED_ON_CURRENT_STATUS);
+            st = con.prepareStatement(QueriesRequest.SQL_UPDATE_REQUEST_STATUS_BASED_ON_CURRENT_STATUS);
             st.setString(1, Status.REJECTED.getName());
             st.setString(2, Status.CREATED.getName());
             st.setInt(3, id);
@@ -143,7 +125,7 @@ public class RequestRepository extends BaseRepository {
                 throw new DaoException("Error!Request is out of date");
             }
             //update task status
-            st = con.prepareStatement(SQL_SET_TASK_CANCELLED_IF_IS_NOT_FINISHED);
+            st = con.prepareStatement(QueriesRequest.SQL_SET_TASK_CANCELLED_IF_IS_NOT_FINISHED);
             Request request = findRequestById(id);
             st.setInt(1, request.getTask().getId());
             st.executeUpdate();
@@ -185,7 +167,7 @@ public class RequestRepository extends BaseRepository {
             conn.setAutoCommit(false);
 
             //firstly, we check if status of task is assigned
-             stCheck = conn.prepareStatement(SQL_CHECK_TASK_STATUS_ASSIGNED);
+             stCheck = conn.prepareStatement(QueriesRequest.SQL_CHECK_TASK_STATUS_ASSIGNED);
              stCheck.setInt(1, request.getTask().getId());
              rsCheck = stCheck.executeQuery();
              if (rsCheck.next()) {
@@ -195,7 +177,7 @@ public class RequestRepository extends BaseRepository {
              }
 
             //Secondly, we perform action with user task
-            st2 = conn.prepareStatement(SQL_ADD_USER_TO_ACTIVITY);
+            st2 = conn.prepareStatement(QueriesRequest.SQL_ADD_USER_TO_ACTIVITY);
             st2.setInt(1, request.getTask().getId());
             int update2 = st2.executeUpdate();
             if (update2 <= 0) {
@@ -204,7 +186,7 @@ public class RequestRepository extends BaseRepository {
                 throw  new DaoException("Error! Could not add to activity");
             }
              //Lastly, we update status, checking if its status was CREATED
-             st = conn.prepareStatement(SQL_UPDATE_REQUEST_STATUS_BASED_ON_CURRENT_STATUS);
+             st = conn.prepareStatement(QueriesRequest.SQL_UPDATE_REQUEST_STATUS_BASED_ON_CURRENT_STATUS);
              st.setString(1, Status.ACCEPTED.getName());
              st.setString(2, Status.CREATED.getName());
              st.setInt(3, request.getId());
@@ -245,7 +227,7 @@ public class RequestRepository extends BaseRepository {
             conn.setAutoCommit(false);
 
             //Firstly, we update status, checking if its status was CREATED
-            st = conn.prepareStatement(SQL_UPDATE_REQUEST_STATUS_BASED_ON_CURRENT_STATUS);
+            st = conn.prepareStatement(QueriesRequest.SQL_UPDATE_REQUEST_STATUS_BASED_ON_CURRENT_STATUS);
             st.setString(1, Status.ACCEPTED.getName());
             st.setString(2, Status.CREATED.getName());
             st.setInt(3, request.getId());
@@ -257,7 +239,7 @@ public class RequestRepository extends BaseRepository {
             }
 
             //secondly, we check if status of task is still assigned
-            stCheck = conn.prepareStatement(SQL_CHECK_TASK_STATUS_ASSIGNED);
+            stCheck = conn.prepareStatement(QueriesRequest.SQL_CHECK_TASK_STATUS_ASSIGNED);
             stCheck.setInt(1, request.getTask().getId());
             rsCheck = stCheck.executeQuery();
             if (!rsCheck.next()) {
@@ -268,7 +250,7 @@ public class RequestRepository extends BaseRepository {
 
 
             //Thirdly, we perform action with user task
-            st2 = conn.prepareStatement(SQL_SET_TASK_CANCELLED_IF_IS_NOT_FINISHED);
+            st2 = conn.prepareStatement(QueriesRequest.SQL_SET_TASK_CANCELLED_IF_IS_NOT_FINISHED);
             st2.setInt(1, request.getTask().getId());
             int update2 = st2.executeUpdate();
             if (update2 <= 0) {
@@ -301,7 +283,7 @@ public class RequestRepository extends BaseRepository {
         Connection con = null;
         try {
             con = getConnection();
-            pstmt = con.prepareStatement(SQL_FIND_REQUEST_BY_ID);
+            pstmt = con.prepareStatement(QueriesRequest.SQL_FIND_REQUEST_BY_ID);
             pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -341,7 +323,7 @@ public class RequestRepository extends BaseRepository {
             con = getConnection();
             setAutoCommit(con,false);
             //check if the same request exists
-            stCheckSimilarRequests = con.prepareStatement(SQL_CHECK_SAME_REQUESTS);
+            stCheckSimilarRequests = con.prepareStatement(QueriesRequest.SQL_CHECK_SAME_REQUESTS);
             stCheckSimilarRequests.setInt(1,userId);
             stCheckSimilarRequests.setInt(2, activityId);
             rs2 = stCheckSimilarRequests.executeQuery();
@@ -353,7 +335,7 @@ public class RequestRepository extends BaseRepository {
             int update = 0;
 
                 //create requested task
-                stCreateTask = con.prepareStatement(SQL_CREATE_REQUESTED_TASK, generatedColumns);
+                stCreateTask = con.prepareStatement(QueriesRequest.SQL_CREATE_REQUESTED_TASK, generatedColumns);
                 stCreateTask.setInt(1, userId);
                 stCreateTask.setInt(2, activityId);
                 update = stCreateTask.executeUpdate();
@@ -368,7 +350,7 @@ public class RequestRepository extends BaseRepository {
                 }
 
             //create the request
-            st = con.prepareStatement(SQL_CREATE_REQUEST  , generatedColumns);
+            st = con.prepareStatement(QueriesRequest.SQL_CREATE_REQUEST  , generatedColumns);
             st.setString(1, Status.CREATED.getName());
             st.setString(2, Motif.ADD.getName());
             Timestamp ts = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC")));
@@ -428,7 +410,7 @@ public class RequestRepository extends BaseRepository {
             }
 
             //check if the same request exists
-            stCheckSimilarRequests = con.prepareStatement(SQL_CHECK_SAME_REQUESTS);
+            stCheckSimilarRequests = con.prepareStatement(QueriesRequest.SQL_CHECK_SAME_REQUESTS);
             stCheckSimilarRequests.setInt(1,userId);
             stCheckSimilarRequests.setInt(2, task.getActivity().getId());
             rs2 = stCheckSimilarRequests.executeQuery();
@@ -438,7 +420,7 @@ public class RequestRepository extends BaseRepository {
             }
             int update = 0;
             //create the request
-            st = con.prepareStatement(SQL_CREATE_REQUEST  , generatedColumns);
+            st = con.prepareStatement(QueriesRequest.SQL_CREATE_REQUEST  , generatedColumns);
             st.setString(1, Status.CREATED.getName());
             st.setString(2, Motif.REMOVE.getName());
             Timestamp ts = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC")));
@@ -483,7 +465,31 @@ public class RequestRepository extends BaseRepository {
         Connection con = null;
         try {
             con = getConnection();
-            pstmt = con.prepareStatement(SQL_FIND_COUNT_ALL_REQUESTS);
+            pstmt = con.prepareStatement(QueriesRequest.SQL_FIND_COUNT_ALL_REQUESTS);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                cnt = rs.getInt("count");
+            }
+            close(rs);
+            close(pstmt);
+            close(con);
+        } catch (SQLException ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING,ex.getLocalizedMessage());
+            close(rs);
+            close(pstmt);
+            close(con);
+        }
+        return cnt;
+    }
+
+    public int getNumRequestsCreated() {
+        int cnt = 0;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(QueriesRequest.SQL_FIND_NUM_CREATED_QUERIES);
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 cnt = rs.getInt("count");

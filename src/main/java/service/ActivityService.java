@@ -41,4 +41,8 @@ public class ActivityService {
     public List<Activity> getAllActivitiesSorted(String sortBy) {
         return dao.findActivitiesSorted(sortBy);
     }
+
+    public int getCountOfActivities() {
+        return dao.getCountActivities();
+    }
 }

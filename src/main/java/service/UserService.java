@@ -18,6 +18,10 @@ public class UserService {
     }
     public static UserService getInstance(){return instance;}
 
+    public   int getCountOfUsers() {
+        return dao.getNumberOfAllUsers();
+    }
+
     public User register (User u) throws ServiceException {
 
         User registered = null;

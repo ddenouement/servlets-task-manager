@@ -21,6 +21,10 @@ public class RequestService {
         return instance;
     }
 
+    public   int getNumberOfCreatedRequests() {
+        return dao.getNumRequestsCreated();
+    }
+
 
     public List<Request> getRequestsByUserId(int id) {
         return dao.findAllRequestsByUserId(id);

@@ -182,5 +182,28 @@ public class UserRepository extends BaseRepository {
     }
 
 
+    public int getNumberOfAllUsers() {
+        int res = 0;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(QueriesUser.SQL_FIND_NUM_USERS);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                res = rs.getInt("count");
+            }
+            close(rs);
+            close(pstmt);
+            close(con);
+        } catch (SQLException ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            close(rs);
+            close(pstmt);
+            close(con);
 
+        }
+        return res;
+    }
 }

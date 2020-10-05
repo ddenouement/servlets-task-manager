@@ -34,7 +34,6 @@ dao\RequestRepository.class
 model\Activity.class
 model\Role.class
 command\impl\user\ListUserTasksCommand.class
-HelloWorldServlet.class
 service\TaskService.class
 command\impl\admin\ListRequestsCommand.class
 command\impl\user\ViewMyProfileCommand.class

@@ -31,8 +31,25 @@
 <c:out value="${infoMessage}"/>
 </div>
 </c:if>
+<div style="margin: auto; width: 60%;">
+Current statistics:
+<div class="card">
+  <div class="card-body">
+    Number of users: <c:out value="${numUsers}"/>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    Number of requests waiting: <c:out value="${numRequestsWaiting}"/>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    Number of activities: <c:out value="${numActivities}"/>
+  </div>
+</div>
+</div>
 
-HELLO IT IS STATS PAGE
 </body>
 </html>
 <%@ page isELIgnored="false" %>

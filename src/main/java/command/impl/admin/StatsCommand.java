@@ -2,6 +2,11 @@ package command.impl.admin;
 
 import command.util.HttpAction;
 import command.ICommand;
+import command.util.PathUtils;
+import service.ActivityService;
+import service.RequestService;
+import service.TaskService;
+import service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +25,14 @@ public class StatsCommand implements ICommand {
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
 
+        PathUtils.saveCurrentPath(request,response);
+        int countOfRequestsWaiting = RequestService.getInstance().getNumberOfCreatedRequests();
+        int countOfUsers = UserService.getInstance().getCountOfUsers();
+        int countOfActivities = ActivityService.getInstance().getCountOfActivities();
+
+        request.setAttribute("numUsers", countOfUsers);
+        request.setAttribute("numActivities", countOfActivities);
+        request.setAttribute("numRequestsWaiting", countOfRequestsWaiting);
         return STATS_VIEW_JSP;
     }
 }

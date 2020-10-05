@@ -22,4 +22,5 @@ public class QueriesTask {
                     "            from user_activity  " +
                     " where progress = 'ASSIGNED' and id_user=? and id_activity=?";
 
+    public static final String SQL_GET_NUM_ACTIVITIES = "select count(*) as count from activity" ;
 }

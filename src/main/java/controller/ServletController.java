@@ -39,7 +39,6 @@ public class ServletController extends HttpServlet {
         String path = command.execute(request, response,action);
 
         if (path != null) {
-
             if (action == HttpAction.GET) {
                 RequestDispatcher disp = request.getRequestDispatcher(path);
                 disp.forward(request, response);

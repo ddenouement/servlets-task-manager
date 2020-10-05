@@ -8,7 +8,7 @@
 <c:if test="${sessionScope.userRole eq 'ADMIN'}">
         <ul  class="navbar-nav">
             <li class="nav-item">
-                <p   class="navbar-text">Logged in as <c:out value="${sessionScope.user.name}"></c:out>
+                <p   class="navbar-text">Logged in as <c:out value="${sessionScope.user.login}"></c:out>
                 </p>
             </li>
             <li class="nav-item"><a class="nav-link" href="/controller?command=users">USERS</a></li>

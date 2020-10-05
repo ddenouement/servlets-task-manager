@@ -8,4 +8,5 @@ public class QueriesUser {
             " values (?, ?, ?, ?, ?, ?)";
     public static final String SQL_FIND_USER_BY_ID = "select * from user where id=?";
 
+    public static final String SQL_FIND_NUM_USERS = "select count(*) as count from user";
 }
