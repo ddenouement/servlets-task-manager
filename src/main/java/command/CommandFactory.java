@@ -3,6 +3,7 @@ package command;
 import command.impl.LanguageCommand;
 import command.impl.ListActivitiesCommand;
 import command.impl.ViewActivityCommand;
+import command.impl.WelcomeCommand;
 import command.impl.admin.*;
 import command.impl.auth.*;
 import command.impl.user.CreateRequestCommand;
@@ -14,11 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandFactory {
-    private static Map<String, ICommand> commands = new HashMap<String, ICommand>();
+    private static Map<String, ICommand> commands = new HashMap<>();
 
     static {
         //common
 
+        commands.put("welcome", new WelcomeCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("login", new LoginCommand());
         commands.put("register", new RegisterCommand());
@@ -45,7 +47,7 @@ public class CommandFactory {
 
     public static ICommand getCommandByName(String commandName) {
         if (commandName == null || !commands.containsKey(commandName)) {
-            return null;
+            return commands.get("welcome");
         }
         return commands.get(commandName);
     }

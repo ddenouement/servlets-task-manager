@@ -6,7 +6,11 @@
 
 <html>
 <head>
-    <title>VIEW MY ASSIGNED TASKS</title>
+
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="lang"/>
+
+    <title> <fmt:message key="my_tasks" /></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
@@ -35,12 +39,12 @@
   <c:if test="${task.progress.name != 'CANCELLED'}">
 
     <li>
-        <p>Activity: <c:out value="${task.activity.name}"/></p>
-        <p>Description: <c:out value="${task.activity.description}"/></p>
-        <p>Progress: <c:out value="${task.progress.name}"/></p>
+        <p><fmt:message key="activity"/>: <c:out value="${lang eq 'ua' ? task.activity.nameUa : task.activity.nameEn }"/></p>
+        <p><fmt:message key="description"/>: <c:out value="${lang eq 'ua'? task.activity.descriptionUa : task.activity.descriptionEn }"/></p>
+        <p><fmt:message key="progress"/>: <fmt:message key="${task.progress.name}"/>  </p>
         <c:if test="${(task.progress.name eq 'FINISHED')}">
-                <p>Hours Spent: <c:out value="${task.timeSpentInHours}"/></p>
-                <p>Date Finished: <c:out value="${task.finishedOn}"/></p>
+                <p><fmt:message key="hours"/> <c:out value="${task.timeSpentInHours}"/></p>
+                <p><fmt:message key="date_finished"/><c:out value="${task.finishedOn}"/></p>
         </c:if>
 
         <c:if test="${(sessionScope.get('user').id == currentUserId) && (task.progress.name != 'REQUESTED' && task.progress.name != 'FINISHED')}">
@@ -50,13 +54,13 @@
 			    <input	type="hidden" name="motif" value="REMOVE" />
 			    <input	type="hidden" name="user_id" value="${sessionScope.get('user').id}" />
 			    <input	type="hidden" name="task_id" value="${task.id}" />
-			    <input type="submit" class = "btn btn-danger" text="Request to remove" value="Remove"/>
+			    <input type="submit" class = "btn btn-danger"   value="<fmt:message key="remove"/>"/>
 		    </form>
 		    	<form id="finishTask" action="controller" method="POST">
             		    	<input type="hidden" name="command" value="finishTask" />
             			    <input	type="hidden" name="id" value="${task.id}" />
             			    <input required	type="number" name="hours" value="2" />
-            			    <input type="submit" class = "btn btn-success" text="Finish" value="Finish"/>
+            			    <input type="submit" class = "btn btn-success"   value="<fmt:message key="finish"/>"/>
                 </form>
         </c:if>
     <li>

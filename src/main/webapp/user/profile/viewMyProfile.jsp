@@ -18,8 +18,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body style="padding-top: 70px">
-<c:import url="/header.jsp"></c:import>
 
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="lang"/>
+
+
+<c:import url="/header.jsp"></c:import>
 
 
 <c:if test="${errorMessage!=null}">
@@ -33,12 +37,12 @@
 </div>
 </c:if>
 
- <p>    				<c:out value="${user.firstName}"></c:out></p>
-<p>						<c:out value="${user.lastName}"></c:out></p>
-	<p>  					<c:out value="${user.login}"></c:out></p>
-<p>						<c:out value="${user.email}"></c:out></p>
+ <p> <fmt:message key="name" />	<c:out value="${user.firstName}"></c:out></p>
+<p><fmt:message key="lastname" /> <c:out value="${user.lastName}"></c:out></p>
+	<p><fmt:message key="login" /> <c:out value="${user.login}"></c:out></p>
+<p>	<fmt:message key="email" /> <c:out value="${user.email}"></c:out></p>
 
-   MY REQUESTS
+  <fmt:message key="my_requests" />
    <div class="list-group col-sm" style="width: 60%; margin: auto;">
   <c:forEach var="req" items="${myRequests}">
 

@@ -31,18 +31,21 @@ public class ServletController extends HttpServlet {
 
         String commandName = request.getParameter("command");
         ICommand command = CommandFactory.getCommandByName(commandName);
-        if(command == null ){
+    /*    if(command == null ){
             RequestDispatcher disp = request.getRequestDispatcher("index.jsp");
             disp.forward(request, response);
             return;
-        }
+        }*/
         String path = command.execute(request, response,action);
 
+        //implementation of Post- Redirect - Get
         if (path != null) {
             if (action == HttpAction.GET) {
                 RequestDispatcher disp = request.getRequestDispatcher(path);
+
                 disp.forward(request, response);
             } else if (action == HttpAction.POST) {
+
                 response.sendRedirect(path);
             }
         }

@@ -12,13 +12,10 @@ public class EncodingFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        String requestEncoding = request.getCharacterEncoding();
-        if (requestEncoding == null) {
-            request.setCharacterEncoding(encoding);
-        }
-
+        request.setCharacterEncoding(encoding);
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding(encoding);
         chain.doFilter(request, response);
     }
 
@@ -28,7 +25,7 @@ public class EncodingFilter implements Filter {
     }
 
 
-    public void init(FilterConfig fConfig) throws ServletException {
+    public void init(FilterConfig fConfig)  {
         encoding = fConfig.getInitParameter("encoding");
     }
 

@@ -1,13 +1,14 @@
 command\impl\LanguageCommand.class
+controller\HomeController.class
 dao\ActivityRepository.class
 filter\ErrorsFilter.class
 service\RequestService.class
 filter\EncodingFilter.class
+command\impl\WelcomeCommand.class
 model\User.class
 command\impl\ViewActivityCommand.class
 command\impl\ListActivitiesCommand.class
 util\QueriesTask.class
-filter\LanguageFilter.class
 command\impl\user\CreateRequestCommand.class
 dao\UserRepository.class
 util\QueriesUser.class

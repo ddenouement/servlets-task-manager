@@ -1,21 +1,19 @@
 package dao;
 
 import model.*;
+import org.apache.logging.log4j.LogManager;
 import util.DBFields;
-import util.QueriesTask;
 import util.QueriesUser;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Optional;
 
 public class UserRepository extends BaseRepository {
+    final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(UserActivityRepository.class);
+
     private static final UserRepository instance = new UserRepository();
 
     private UserRepository() {
@@ -26,15 +24,12 @@ public class UserRepository extends BaseRepository {
         return instance;
     }
 
-    public User register(User user) throws DaoException {
+    public Optional<User> register(User user) throws DaoException {
 
-        User found = findUserByLogin(user.getLogin());
-        if (found != null) {
-
-            System.out.println(found.getFirstName());
+        Optional<User> found = findUserByLogin(user.getLogin());
+        if (found.isPresent()) {
             throw new DaoException("User with this login already Exists");
         }
-
         Connection con = null;
         String generatedColumns[] = {"id"};
         PreparedStatement st = null;
@@ -58,32 +53,32 @@ public class UserRepository extends BaseRepository {
                     int id = rs.getInt(1);
                     user.setId(id);
                 }
-                return user;
+                return Optional.of(user);
             }
         } catch (SQLException throwables) {
-            Logger.getAnonymousLogger().log(Level.WARNING, throwables.getLocalizedMessage());
+            logger.warn( throwables.getLocalizedMessage());
             close(rs);
             close(st);
             close(con);
         }
-        return null;
+        return Optional.empty();
     }
 
 
-    public User authorizeByPasswordAndLogin(String login, String password) {
-        User found = findUserByLogin(login);
-        if (found != null) {
+    public Optional<User> authorizeByPasswordAndLogin(String login, String password) {
+        Optional<User> found = findUserByLogin(login);
+        if (found.isPresent()) {
             String encodedSentPass = Base64.getEncoder().encodeToString(password.getBytes());
-            String encodedActualPass = found.getPassword();
+            String encodedActualPass = found.get().getPassword();
             if (encodedActualPass.equals(encodedSentPass)) {
-                return found;
+                return (found);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 
-    public User findUserByLogin(String login) {
+    public Optional<User> findUserByLogin(String login) {
         User user = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -96,17 +91,15 @@ public class UserRepository extends BaseRepository {
             if (rs.next()) {
                 user = mapRow(rs);
             }
-            close(rs);
-            close(pstmt);
-            close(con);
         } catch (SQLException ex) {
-            System.out.println(ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
+        }
+        finally {
             close(rs);
             close(pstmt);
             close(con);
-
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
     public List<User> findAllUsers() {
@@ -128,7 +121,7 @@ public class UserRepository extends BaseRepository {
             close(con);
         } catch (SQLException ex) {
 
-            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             close(rs);
             close(pstmt);
             close(con);
@@ -155,7 +148,7 @@ public class UserRepository extends BaseRepository {
     }
 
 
-    public User findUserById(int id_user) {
+    public Optional<User> findUserById(int id_user) {
         User user = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -168,17 +161,15 @@ public class UserRepository extends BaseRepository {
             if (rs.next()) {
                 user = mapRow(rs);
             }
-            close(rs);
-            close(pstmt);
-            close(con);
         } catch (SQLException ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
+        }
+        finally {
             close(rs);
             close(pstmt);
             close(con);
-
         }
-        return user;
+        return Optional.ofNullable(user);
     }
 
 
@@ -198,7 +189,7 @@ public class UserRepository extends BaseRepository {
             close(pstmt);
             close(con);
         } catch (SQLException ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            logger.warn( ex.getLocalizedMessage());
             close(rs);
             close(pstmt);
             close(con);

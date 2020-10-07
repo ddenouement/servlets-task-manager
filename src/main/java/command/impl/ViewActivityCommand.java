@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class ViewActivityCommand implements ICommand {
 
     private static final String JSP_VIEW_ACTIVITY_PAGE ="viewActivityPage.jsp";
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) {
         String result = null;
         if(action == HttpAction.GET){
            result = doGet(request, response);
@@ -32,8 +33,12 @@ public class ViewActivityCommand implements ICommand {
         PathUtils.saveCurrentPath(request, response);
 
         int activityId = Integer.parseInt(request.getParameter("id"));
-        Activity activity = ActivityService.getInstance().getActivityById(activityId);
-        request.setAttribute("activity", activity);
+        Optional<Activity> activity = ActivityService.getInstance()
+                .getActivityById(activityId);
+        if(!activity.isPresent())
+            request.setAttribute("errorMessage", "No activity found");
+
+        request.setAttribute("activity", activity.get());
 
         String filterProgress = request.getParameter("progress");
         String progress = Progress.ASSIGNED.getName();

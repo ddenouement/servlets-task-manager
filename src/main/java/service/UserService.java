@@ -6,6 +6,7 @@ import model.User;
 import model.UserActivity;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class UserService {
@@ -24,11 +25,10 @@ public class UserService {
 
     public User register (User u) throws ServiceException {
 
-        User registered = null;
+        User registered ;
         try {
-             registered = dao.register(u);
-            if(registered == null)
-                throw new ServiceException("Wrong input");
+             registered = dao.register(u).orElseThrow(()->
+                     new ServiceException("Wrong input"));
         } catch (DaoException e) {
             throw new ServiceException(e.getMsg());
         }
@@ -38,16 +38,16 @@ public class UserService {
         return dao.findAllUsers();
     }
 
-    public User findUserById(int id){
+    public Optional<User> findUserById(int id){
         return dao.findUserById(id);
     }
 
-    public User findUserByLogin(String login){
+    public Optional<User> findUserByLogin(String login){
         return dao.findUserByLogin(login);
     }
 
-    public User login(String login, String password) {
-        return dao.authorizeByPasswordAndLogin(login,password);
+    public User login(String login, String password) throws ServiceException {
+        return dao.authorizeByPasswordAndLogin(login,password).orElseThrow(() -> new ServiceException("Invalid Credentials"));
     }
 
 }

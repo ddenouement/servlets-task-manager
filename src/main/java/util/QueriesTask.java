@@ -18,9 +18,13 @@ public class QueriesTask {
                     "and user_activity.id_user=?";
     public static final String SQL_FIND_TASK_BY_ID = "select id as task_id, progress, id_activity, id_user, time_elapsed_hrs, date_end from user_activity  where id=?";
     public static final String SQL_FIND_UNFINISHED_USER_TASK_BY_ACTIVITY_ID =
-            "select distinct user_activity.id as task_id, progress, user_activity.id_activity, time_elapsed_hrs, date_end  \n" +
-                    "            from user_activity  " +
+            "select distinct user_activity.id as task_id, progress, user_activity.id_activity, id_user time_elapsed_hrs, date_end  \n" +
+                    " from user_activity  " +
                     " where progress = 'ASSIGNED' and id_user=? and id_activity=?";
 
-    public static final String SQL_GET_NUM_ACTIVITIES = "select count(*) as count from activity" ;
+    public static final String SQL_GET_NUM_ACTIVITIES =
+            "select count(*) as count from activity" ;
+    public static final String SQL_FIND_ALL_TASKS_FINISHED =
+            "select distinct  id as task_id, id_user, progress,  id_activity, time_elapsed_hrs, date_end  \n" +
+            " from user_activity where progress='FINISHED' ";
 }

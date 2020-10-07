@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class EditActivityCommand implements ICommand {
     private static String REDIRECT_ON_VIEW_ACTIVITY_PAGE = "controller?command=viewActivity";
@@ -21,7 +22,7 @@ public class EditActivityCommand implements ICommand {
     private static String FORWARD_JSP_EDIT_ACTIVITY_PAGE = "/admin/activity/edit.jsp";
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) {
         String result = null;
         if (action == HttpAction.GET) {
             result = doGet(request, response);
@@ -67,10 +68,13 @@ public class EditActivityCommand implements ICommand {
         PathUtils.saveCurrentPath(request, response);
 
         int activityId = Integer.parseInt(request.getParameter("id"));
-        Activity activity = ActivityService.getInstance().getActivityById(activityId);
-        request.setAttribute("activity", activity);
+        Optional<Activity> activity = ActivityService.getInstance().getActivityById(activityId);
 
-         request.setAttribute("categories", Category.values());
+        if(!activity.isPresent())
+            request.setAttribute("errorMessage", "No such activity found");
+        request.setAttribute("activity", activity.get());
+
+        request.setAttribute("categories", Category.values());
 
 
         return FORWARD_JSP_EDIT_ACTIVITY_PAGE;

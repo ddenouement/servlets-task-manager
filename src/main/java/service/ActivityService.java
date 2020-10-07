@@ -5,6 +5,7 @@ import dao.DaoException;
 import model.Activity;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ActivityService {
     ActivityRepository dao = ActivityRepository.getInstance();
@@ -17,14 +18,14 @@ public class ActivityService {
 
     public List<Activity> getAllActivities(){return dao.findAllActivities();}
 
-    public Activity getActivityById(int id){
+    public Optional<Activity> getActivityById(int id) {
         return dao.findActivityById(id);
     }
 
 
     public Activity createActivity(Activity activity) throws ServiceException {
          try {
-            return dao.createActivity(activity);
+             return dao.createActivity(activity).orElseThrow(() -> new ServiceException("Can not create activity"));
         } catch (DaoException e) {
             throw new ServiceException("Can not create activity");
         }

@@ -6,7 +6,10 @@
 
 <html>
 <head>
-    <title>VIEW ACTIVITY</title>
+
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="lang"/>
+    <title><fmt:message key="view_activity" /></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
@@ -30,53 +33,50 @@
 </c:if>
 
 <div style="width: 60%; margin: auto">
-	<p>Name: <c:out value="${activity.name}"></c:out>
-	       <span class="badge badge-info"><c:out value="${activity.category.name}"></c:out></span>
+	<p>  <c:out value="${lang eq 'ua' ? activity.nameUa : activity.nameEn}"/>
+	       <span class="badge badge-info"><fmt:message key="${activity.category.name}"/></span>
 	</p>
-	<p>Description: <c:out value="${activity.description}"></c:out></p>
+	<p>  <c:out value="${lang eq 'ua' ? activity.descriptionUa : activity.descriptionEn}"/></p>
 
 <c:if test="${sessionScope.get('userRole') == 'ADMIN'}">
     <a class="btn btn-primary" href="/controller?command=editActivity&id=${activity.id}" role="button">EDIT</a>
 </c:if>
 <c:if test="${sessionScope.get('userRole') == 'USER'}">
-ENROLL ME TO THIS ACTIVITY
+<fmt:message key="enroll_me_to_activity" />
 		<form id="create_request" action="controller" method="POST">
 			<input type="hidden" name="command" value="createRequest" />
 			<input	type="hidden" name="user_id" value="${sessionScope.get('user').id}" />
 			<input	type="hidden" name="motif" value="ADD" />
 			<input	type="hidden" name="activity_id" value="${activity.id}" />
-			<input type="submit" class = "btn btn-success" text="Enroll" value="Enroll"/>
+			<input type="submit" class = "btn btn-success"  value="<fmt:message key="enroll" />"/>
 		</form>
 </c:if>
 
 </div>
+<fmt:message key="people" />
 
-PEOPLE DOING THIS ACTIVITY:
-
-
-<label for="view_activity"> Sort by progress:</label>
 <form id="view_activity" action="controller" method="GET">
 			<input type="hidden" name="command" value="viewActivity" />
 			<input type="hidden" name="id" value="${activity.id}" />
 
 <select name="progress" class="form-control">
       <c:forEach items="${progresses}" var="pro">
-          <option value="${pro.name}" text="${pro.name}" ${pro eq  filterByProgress? 'selected="selected"' : ''}><c:out value="${pro.name}"></c:out></option>
+          <option value="${pro.name}" text="${pro.name}" ${pro eq  filterByProgress? 'selected="selected"' : ''}><fmt:message key="${pro.name}"/></option>
       </c:forEach>
 </select>
-<button type="submit" class="btn btn-primary">FILTER</button>
+<button type="submit" class="btn btn-primary"><fmt:message key="filter"/></button>
 </form>
 
 
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Email</th>
-      <th scope="col">Task progress</th>
-      <th scope="col">End Date</th>
-      <th scope="col">Hours Spent</th>
+      <th scope="col"><fmt:message key="name"/></th>
+      <th scope="col"><fmt:message key="lastname"/></th>
+      <th scope="col"><fmt:message key="email"/></th>
+      <th scope="col"><fmt:message key="progress"/></th>
+      <th scope="col"><fmt:message key="date_finished"/></th>
+      <th scope="col"><fmt:message key="hours"/></th>
     </tr>
   </thead>
   <tbody>
@@ -94,8 +94,8 @@ PEOPLE DOING THIS ACTIVITY:
 	  	<c:out value="${task.user.email}"></c:out>
 	 </td>
      <td>
-		<c:out value="${task.progress.name}"></c:out>
-	 </td>
+        <fmt:message key="${task.progress.name}" />
+		</td>
      <td>
 		<c:out value="${task.finishedOn}"></c:out>
 	 </td>

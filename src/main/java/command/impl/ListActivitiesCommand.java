@@ -27,7 +27,7 @@ public class ListActivitiesCommand implements ICommand {
     private static final String REDIRECT_ACTIVITIES_LIST_PAGE = "controller?command=activities";
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action)  {
         String result = null;
 
         if (HttpAction.GET == action) {
@@ -93,8 +93,6 @@ public class ListActivitiesCommand implements ICommand {
 
         List<Activity> activities = ActivityService.getInstance().getAllActivitiesSorted(sortBy);
         request.setAttribute("activities", activities);
-
-     //   List<Category> availableCategories = CategoryService.getInstance().getAllCategories();
         request.setAttribute("categories", Category.values());
 
         return ACTIVITIES_LIST_PAGE_JSP;

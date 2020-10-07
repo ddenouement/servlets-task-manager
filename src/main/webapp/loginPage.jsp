@@ -9,7 +9,10 @@
 </c:if>
 <html>
 <head>
-    <title>LOGIN</title>
+
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="lang"/>
+    <title><fmt:message key="login" /></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
@@ -36,9 +39,9 @@
                 <form name="login-form"method="post" action="controller" >
                             <input type="hidden" name="command" value="login"/>
                   <input type="text" name="login">
-                 <input type="password" name="password">
+                  <input type="password" name="password">
 
-                    <input type = "submit" value="Send" text="Send"></input>
+                    <input type = "submit" value="<fmt:message key="login"/>" ></input>
 
 
                 </form>

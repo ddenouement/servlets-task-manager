@@ -3,6 +3,8 @@ package dao;
 import model.Activity;
 import model.User;
 import model.UserActivity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import util.QueriesTask;
 
 import java.sql.*;
@@ -10,11 +12,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Optional;
 
 public class UserActivityRepository extends BaseRepository {
+
+    final static Logger logger = LogManager.getLogger(UserActivityRepository.class);
     private static final UserActivityRepository instance = new UserActivityRepository();
 
     private UserActivityRepository() {
@@ -24,7 +28,6 @@ public class UserActivityRepository extends BaseRepository {
     public static UserActivityRepository getInstance() {
         return instance;
     }
-
 
 
     public List<UserActivity> findTasksByActivityByProgress(int activityId, String progress) {
@@ -40,20 +43,7 @@ public class UserActivityRepository extends BaseRepository {
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 if (tasks == null) tasks = new ArrayList<>();
-                UserActivity userActivity = mapRow(rs);/*
-                UserActivity userActivity = new UserActivity();
-                userActivity.setId(rs.getInt("task_id"));
-                User u = UserRepository.getInstance().mapRow(rs);
-                userActivity.setUser(u);
-                userActivity.setProgress(rs.getString("progress"));
-
-                Timestamp timestamp = rs.getTimestamp("date_end");
-                if (timestamp != null) {
-                    ZonedDateTime time = timestamp.toLocalDateTime().atZone(ZoneId.of("UTC"));
-                    userActivity.setFinishedOn(time);
-                }
-                userActivity.setTimeSpentInHours(rs.getInt("time_elapsed_hrs"));
-*/
+                UserActivity userActivity = mapRow(rs);
                 tasks.add(userActivity);
             }
             close(rs);
@@ -63,17 +53,15 @@ public class UserActivityRepository extends BaseRepository {
             close(rs);
             close(pstmt);
             close(con);
-            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
         }
         return tasks;
     }
 
 
-
-
     public List<UserActivity> findTasksByUserId(int user_id) {
         List<UserActivity> tasks = new ArrayList<>();
-        ;
+
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -87,7 +75,7 @@ public class UserActivityRepository extends BaseRepository {
                 tasks.add(mapRow(rs));
             }
         } catch (SQLException ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            logger.warn( ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -112,8 +100,8 @@ public class UserActivityRepository extends BaseRepository {
             if (i <= 0) {
                 throw new DaoException("Cannot set finished");
             }
-        } catch (SQLException ignored) {
-            Logger.getAnonymousLogger().log(Level.WARNING, ignored.getLocalizedMessage());
+        } catch (SQLException e) {
+            logger.warn( e.getLocalizedMessage());
             throw new DaoException("Cannot set finished");
         } finally {
             close(rs);
@@ -124,7 +112,7 @@ public class UserActivityRepository extends BaseRepository {
     }
 
 
-    public UserActivity findTaskById(int id_task) {
+    public Optional<UserActivity> findTaskById(int id_task) {
         UserActivity task = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -138,13 +126,13 @@ public class UserActivityRepository extends BaseRepository {
                 task = mapRow(rs);
             }
         } catch (SQLException ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            logger.warn( ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
             close(con);
         }
-        return task;
+        return Optional.ofNullable(task);
     }
 
     public boolean checkUserHasSameUnfinishedTask(int userId, int activityId) {
@@ -161,7 +149,7 @@ public class UserActivityRepository extends BaseRepository {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, ex.getLocalizedMessage());
+            logger.warn( ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -181,18 +169,44 @@ public class UserActivityRepository extends BaseRepository {
                 ZonedDateTime time = timestamp.toLocalDateTime().atZone(ZoneId.of("UTC"));
                 task.setFinishedOn(time);
             }
-            User user = UserRepository.getInstance().findUserById(rs.getInt("id_user"));
-            Activity activity = ActivityRepository.getInstance().findActivityById(
-                    rs.getInt("id_activity"));
+            User user = UserRepository.getInstance()
+                    .findUserById(rs.getInt("id_user"))
+                    .orElseThrow(() -> new SQLException("No such user exists!"));
+            Activity activity = ActivityRepository.getInstance()
+                    .findActivityById(rs.getInt("id_activity"))
+                    .orElseThrow(() -> new SQLException("No Task found"));
             task.setTimeSpentInHours(rs.getInt("time_elapsed_hrs"));
             task.setActivity(activity);
             task.setUser(user);
         } catch (SQLException throwables) {
-            Logger.getAnonymousLogger().log(Level.WARNING, throwables.getMessage());
+            logger.warn(throwables.getMessage());
         }
         return task;
     }
 
 
-
+    public List<UserActivity> findAllTasks() {
+        List<UserActivity> tasks = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(QueriesTask.SQL_FIND_ALL_TASKS_FINISHED);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                if (tasks == null) tasks = new ArrayList<>();
+                UserActivity userActivity = mapRow(rs);
+                tasks.add(userActivity);
+            }
+        } catch (SQLException ex) {
+            logger.warn(ex.getLocalizedMessage());
+        }
+        finally {
+            close(rs);
+            close(pstmt);
+            close(con);
+        }
+        return tasks;
+    }
 }

@@ -6,7 +6,9 @@ import dao.UserRepository;
 import javafx.concurrent.Task;
 import model.UserActivity;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class TaskService {
     UserActivityRepository dao = UserActivityRepository.getInstance();
@@ -33,5 +35,8 @@ public class TaskService {
         }
     }
 
+    public Stream<UserActivity> getAllTasksStream() {
+        return dao.findAllTasks().stream();
+    }
 }
 

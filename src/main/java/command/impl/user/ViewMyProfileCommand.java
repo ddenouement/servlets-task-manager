@@ -17,9 +17,10 @@ import java.util.List;
 
 public class ViewMyProfileCommand implements ICommand {
 
-    private final static  String MY_PROFILE_VIEW_PAGE_JSP = "/user/profile/viewMyProfile.jsp";
+    private final static String MY_PROFILE_VIEW_PAGE_JSP = "/user/profile/viewMyProfile.jsp";
+
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) {
         String result = null;
 
         if (HttpAction.GET == action) {
@@ -34,13 +35,11 @@ public class ViewMyProfileCommand implements ICommand {
         User user = (User) request.getSession(false).getAttribute("user");
         if (user != null) {
             int userId = user.getId();
-            //TODO  List<UserActivity> userActivitiesList = RequestService.getInstance().getRequestsByUserId(userId);
-
             List<Request> requestList = RequestService.getInstance().getRequestsByUserId(userId);
             request.setAttribute("myRequests", requestList);
 
-        return MY_PROFILE_VIEW_PAGE_JSP;
-         }
+            return MY_PROFILE_VIEW_PAGE_JSP;
+        }
         return null;
     }
 }

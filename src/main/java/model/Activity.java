@@ -22,8 +22,8 @@ public class Activity {
 
         private Category category;
 
-        public Set<Request> requests = new HashSet<Request>();
-        public Set<UserActivity> userActivities = new HashSet<UserActivity>(); ;
+        public Set<Request> requests = new HashSet<>();
+        public Set<UserActivity> userActivities = new HashSet<>();
 
         public void setId(int id) {
                 this.id = id;
@@ -92,6 +92,7 @@ public class Activity {
                         ", userActivities=" + userActivities +
                         '}';
         }
+
 
         public Category getCategory() {
                 return category;

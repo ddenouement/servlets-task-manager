@@ -6,7 +6,10 @@
 
 <html>
 <head>
-    <title>ALL TASKS</title>
+
+    <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="lang"/>
+    <title><fmt:message key="header.all_activities" /></title>
     <meta charset="utf-8">
     <meta charset=utf-8>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -80,23 +83,23 @@
 
 <form  id="activities" action="controller" method="GET">
       			<input type="hidden" name="command" value="activities" />
-Sort by:
+<fmt:message key="sort" />:
   <input type="radio" id="ppl" name="sortBy" ${sortBy eq '0'? 'checked="checked"' : '' } value="0">
-  <label for="ppl">People currently working</label><br>
+  <label for="ppl"><fmt:message key="people_working" /></label><br>
   <input type="radio" id="cat" name="sortBy" ${sortBy eq '1'? 'checked="checked"' : '' } value="1">
-  <label for="cat">Category</label><br>
+  <label for="cat"><fmt:message key="category" /></label><br>
   <input type="radio"  id="name" name="sortBy" ${sortBy eq '2'? 'checked="checked"' : '' } value="2">
-  <label for="name">Name</label>
-<button type="submit" class="btn btn-info">SORT</button>
+  <label for="name"><fmt:message key="name" /></label>
+<button type="submit" class="btn btn-info"><fmt:message key="sort" /></button>
 </form>
 
 
 <ul class="list-group">
   <c:forEach var="task" items="${activities}">
         <a class="list-group-item" href="<c:url value="controller?command=viewActivity"> <c:param name="id" value="${task.id}"/></c:url>">
-        <h3><c:out value="${task.name}"></c:out> <span class="badge badge-info"><c:out value="${task.category.name}"></c:out></span> </h3>
-        <p><c:out value="${task.description}"></c:out></p>
-         <p>People currently working: <c:out value="${task.peopleAmount}"></c:out></p>
+        <h3><c:out value="${lang eq 'ua'? task.nameUa : task.nameEn}"></c:out> <span class="badge badge-info"><fmt:message key="${task.category.name}"/></span> </h3>
+        <p><c:out value="${lang eq 'ua'? task.descriptionUa : task.descriptionEn}"></c:out></p>
+         <p><fmt:message key="people_working" /> <c:out value="${task.peopleAmount}"></c:out></p>
         </a>
   </c:forEach>
   </ul>

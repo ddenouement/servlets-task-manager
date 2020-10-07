@@ -13,7 +13,7 @@ import java.io.IOException;
 public class LanguageCommand implements ICommand {
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) {
 
         String result = null;
         if (HttpAction.POST == action) {
@@ -24,16 +24,13 @@ public class LanguageCommand implements ICommand {
 
     private String doPost(HttpServletRequest request, HttpServletResponse response) {
 
-
-
         HttpSession session = request.getSession(true);
 
-        String language = request.getParameter("language");
+        String language = request.getParameter("lang");
 
-        session.setAttribute("language", language);
+        session.setAttribute("lang", language);
 
-        System.out.println("Language changed to"+language);
-        return null;
+        return PathUtils.getSavedPath(request, response);
     }
 
 }

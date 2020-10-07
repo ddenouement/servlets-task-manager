@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class ViewUserCommand implements ICommand {
 
@@ -32,25 +33,32 @@ public class ViewUserCommand implements ICommand {
     }
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
-        User currentUser  = (User)request.getSession().getAttribute("user");
+        User currentUser = (User) request.getSession().getAttribute("user");
         String paramId = request.getParameter("id");
-        int userId = 0;
+        int userId ;
         try {
-            userId =  Integer.parseInt(paramId);
-        }
-        catch (NumberFormatException a){
+            userId = Integer.parseInt(paramId);
+        } catch (NumberFormatException a) {
             return PathUtils.getSavedPath(request, response);
         }
 
-        if(currentUser != null && currentUser.getRole() == Role.ADMIN) {
+        if (currentUser != null && currentUser.getRole() == Role.ADMIN) {
             PathUtils.saveCurrentPath(request, response);
-            User user = UserService.getInstance().findUserById(userId);
-            List<Request> requestList = RequestService.getInstance().getRequestsByUserId(userId);
-            request.setAttribute("userview", user);
+            Optional<User> user = UserService.getInstance().findUserById(userId);
+            List<Request> requestList = null;
+            if (user.isPresent()) {
+                requestList = RequestService.getInstance().getRequestsByUserId(userId);
+            }
+            if (!user.isPresent()) {
+                request.setAttribute("errorMessage", "No such user found");
+            }
+            request.setAttribute("userview", user.get());
             request.setAttribute("userRequests", requestList);
             return USER_VIEW_PAGE_JSP;
         }
-        request.getSession().setAttribute("errorMessage", "Access was denied");
+
+
+        request.setAttribute("errorMessage", "Access was denied");
         return PathUtils.getSavedPath(request, response);
     }
 }
