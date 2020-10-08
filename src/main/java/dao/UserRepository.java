@@ -5,6 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import util.DBFields;
 import util.QueriesUser;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -38,7 +41,11 @@ public class UserRepository extends BaseRepository {
             con = getConnection();
             st = con.prepareStatement(QueriesUser.SQL_INSERT_USER, generatedColumns);
 
-            String encodedPass = Base64.getEncoder().encodeToString(user.getPassword().getBytes());
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(user.getPassword().getBytes());
+            byte[] digest = md.digest();
+            String encodedPass  = DatatypeConverter
+                    .printHexBinary(digest).toUpperCase();
 
             st.setString(1, user.getLogin());
             st.setString(2, user.getEmail());
@@ -56,10 +63,12 @@ public class UserRepository extends BaseRepository {
                 return Optional.of(user);
             }
         } catch (SQLException throwables) {
-            logger.warn( throwables.getLocalizedMessage());
+            logger.warn(throwables.getLocalizedMessage());
             close(rs);
             close(st);
             close(con);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
         return Optional.empty();
     }
@@ -68,9 +77,20 @@ public class UserRepository extends BaseRepository {
     public Optional<User> authorizeByPasswordAndLogin(String login, String password) {
         Optional<User> found = findUserByLogin(login);
         if (found.isPresent()) {
-            String encodedSentPass = Base64.getEncoder().encodeToString(password.getBytes());
+            MessageDigest md = null;
+            String hashedSentPass = "";
+            try {
+                md = MessageDigest.getInstance("MD5");
+                md.update(password.getBytes());
+                byte[] digest = md.digest();
+                hashedSentPass = DatatypeConverter
+                        .printHexBinary(digest).toUpperCase();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
             String encodedActualPass = found.get().getPassword();
-            if (encodedActualPass.equals(encodedSentPass)) {
+            if (encodedActualPass.equals(hashedSentPass)) {
                 return (found);
             }
         }
@@ -93,8 +113,7 @@ public class UserRepository extends BaseRepository {
             }
         } catch (SQLException ex) {
             logger.warn(ex.getLocalizedMessage());
-        }
-        finally {
+        } finally {
             close(rs);
             close(pstmt);
             close(con);
@@ -163,8 +182,7 @@ public class UserRepository extends BaseRepository {
             }
         } catch (SQLException ex) {
             logger.warn(ex.getLocalizedMessage());
-        }
-        finally {
+        } finally {
             close(rs);
             close(pstmt);
             close(con);
@@ -189,7 +207,7 @@ public class UserRepository extends BaseRepository {
             close(pstmt);
             close(con);
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             close(rs);
             close(pstmt);
             close(con);
