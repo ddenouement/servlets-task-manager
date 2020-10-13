@@ -13,7 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RegisterCommand implements ICommand {
 
@@ -23,8 +27,7 @@ public class RegisterCommand implements ICommand {
 
     @Override
     public String execute(HttpServletRequest request,
-                          HttpServletResponse response, HttpAction actionType)
-        {
+                          HttpServletResponse response, HttpAction actionType) {
 
         String result = null;
 
@@ -38,20 +41,28 @@ public class RegisterCommand implements ICommand {
 
     private String doPost(HttpServletRequest request, HttpServletResponse response) {
 
-       String login = request.getParameter("login");
+        //obtain parameters from request
+        String login = request.getParameter("login");
         String name = request.getParameter("name");
         String lastname = request.getParameter("lastname");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
         String errorMessage;
-        Optional<User> foundUser = UserService.getInstance().findUserByLogin(login);
 
+        //obtain locale from session or default
+        String language = (String) request.getSession().getAttribute("lang");
+        Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
+        ResourceBundle myBundle = ResourceBundle.getBundle("lang", locale);
+
+        //if we found user with such login, return error message and redirect to login page again
+        Optional<User> foundUser = UserService.getInstance().findUserByLogin(login);
         if (foundUser.isPresent()) {
-            errorMessage = "Login is already in use!";
+            errorMessage = myBundle.getString("exception.login_exists");
             request.getSession(true).setAttribute("errorMessage", errorMessage);
             return REDIRECT_REGISTER_PAGE;
         } else {
+            //create user object
             User user = new User();
             user.setRole(role);
             user.setEmail(email);
@@ -59,15 +70,32 @@ public class RegisterCommand implements ICommand {
             user.setPassword(password);
             user.setLastName(lastname);
             user.setLogin(login);
-            try {
-                UserService.getInstance().register(user);
-                request.getSession(true).setAttribute("infoMessage", "You registered successfully, now login");
-            } catch (ServiceException e) {
-                errorMessage = "Login is already in use!";
-                request.getSession(true).setAttribute("errorMessage", errorMessage);
-                return REDIRECT_REGISTER_PAGE;
+
+            //Validate created User object, before going to Database
+            Set<String> validationMessages = user.validate();
+            String validationMessage =
+                    validationMessages.stream()
+                    .map(myBundle::getString)
+                    .collect(Collectors.joining(","));
+
+            //only if there are no validation exceptions
+            if (validationMessage.isEmpty()) {
+                //Try to and add it to database
+                try {
+                    UserService.getInstance().register(user);
+                    request.getSession(true).setAttribute("infoMessage", myBundle.getString("message.register_success"));
+
+                } catch (ServiceException e) {
+                    errorMessage = myBundle.getString("exception.login_exists");
+                    request.getSession(true).setAttribute("errorMessage", errorMessage);
+                    return REDIRECT_REGISTER_PAGE;
+                }
             }
 
+            else {
+                request.getSession(true).setAttribute("errorMessage", validationMessage);
+                return REDIRECT_REGISTER_PAGE;
+            }
         }
         return REDIRECT_LOGIN_PAGE;
     }

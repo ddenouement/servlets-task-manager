@@ -2,18 +2,22 @@ package command.impl.auth;
 
 import command.util.HttpAction;
 import command.ICommand;
+import command.util.ParameterGetter;
 import command.util.PathUtils;
 import model.Role;
 import model.User;
 import service.ServiceException;
 import service.UserService;
+import sun.security.validator.ValidatorException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class LoginCommand implements ICommand {
     private static final String LOGIN_PAGE_JSP = "loginPage.jsp";
@@ -38,11 +42,25 @@ public class LoginCommand implements ICommand {
         String redirect = REDIRECT_LOGIN;
         HttpSession session = request.getSession(true);
 
-        // obtain login and password from the request
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        String errorMessage ;
+        //obtain locale from session or default
+        String language = (String) request.getSession().getAttribute("lang");
+        Locale locale = (language == null) ? Locale.getDefault() : new Locale(language);
+        ResourceBundle myBundle = ResourceBundle.getBundle("lang", locale);
 
+        //try obtain login and password from the request using custom helper class
+        String login = null;
+        String password = null;
+        String errorMessage ;
+        try {
+            login = ParameterGetter.getStringParam(request,"login");
+            password =  ParameterGetter.getStringParam(request, "password");
+        } catch (ValidatorException e) {
+            errorMessage = myBundle.getString("validation.no_password");
+            request.getSession(true).setAttribute("errorMessage", errorMessage);
+            return redirect;
+        }
+
+        //proceed with parameters given from request
         User user ;
         try {
             user = UserService.getInstance().login(login, password);

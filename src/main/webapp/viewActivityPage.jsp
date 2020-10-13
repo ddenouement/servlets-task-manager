@@ -40,7 +40,17 @@
 
 <c:if test="${sessionScope.get('userRole') == 'ADMIN'}">
     <a class="btn btn-primary" href="/controller?command=editActivity&id=${activity.id}" role="button">EDIT</a>
+    <form method="POST"  action="controller">
+            <input type="hidden" name="command" value="deleteActivity"/>
+            <input type="hidden" name="id" value="${activity.id}"/>
+            <button class="btn btn-danger" type="submit">
+             DELETE
+             </button>
+    </form>
+
+    <p class="text-danger">WARNING: if you delete activity, all related requests and tasks delete on cascade</p>
 </c:if>
+
 <c:if test="${sessionScope.get('userRole') == 'USER'}">
 <fmt:message key="enroll_me_to_activity" />
 		<form id="create_request" action="controller" method="POST">

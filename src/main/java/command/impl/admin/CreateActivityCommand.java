@@ -1,47 +1,33 @@
-package command.impl;
+package command.impl.admin;
 
-import com.mysql.cj.Session;
-import command.util.HttpAction;
 import command.ICommand;
-import command.util.ParameterGetter;
+import command.util.HttpAction;
 import command.util.PathUtils;
-import dao.ActivityRepository;
 import model.Activity;
 import model.Category;
-import model.Request;
-import model.User;
 import service.ActivityService;
-import service.RequestService;
 import service.ServiceException;
-import service.UserService;
-import sun.security.validator.ValidatorException;
-import util.DBFields;
-import util.SortActivitiesFields;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-public class ListActivitiesCommand implements ICommand {
+public class CreateActivityCommand implements ICommand {
 
-    private static int page = 1;
-    private static int recordsPerPage = 3;
-    private static final String ACTIVITIES_LIST_PAGE_JSP = "activitiesPage.jsp";
+    private static final String JSP_ADD_ACTIVITY_PAGE ="admin/activity/add.jsp";
+
     private static final String REDIRECT_ACTIVITIES_LIST_PAGE = "controller?command=activities";
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) {
+    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action)  {
         String result = null;
-
-        if (HttpAction.GET == action) {
-            result = doGet(request, response);
-
-        } else if (HttpAction.POST == action) {
+        if (HttpAction.POST == action) {
             result = doPost(request, response);
 
+        }else if (action == HttpAction.GET) {
+            result = doGet(request, response);
         }
         return result;
     }
@@ -68,7 +54,7 @@ public class ListActivitiesCommand implements ICommand {
             activity.setDescriptionUa(descrUa);
             activity.setDescription(descr);
 
-            try {
+            try{
                 ActivityService.getInstance().createActivity(activity);
                 request.getSession().setAttribute("infoMessage", "You created activity successfully");
             } catch (ServiceException e) {
@@ -78,35 +64,12 @@ public class ListActivitiesCommand implements ICommand {
         }
         return REDIRECT_ACTIVITIES_LIST_PAGE;
     }
-
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
         PathUtils.saveCurrentPath(request, response);
 
-        SortActivitiesFields defaultSort = SortActivitiesFields.ACTIVITY_NAME;
-        String sortBy = defaultSort.getValue();
-        int sortId = defaultSort.ordinal();
-
-        try {
-            sortId = ParameterGetter.getIntParam(request, "sortBy");
-            sortBy = SortActivitiesFields.values()[sortId].getValue();
-        } catch (ValidatorException | ArrayIndexOutOfBoundsException ignored) {
-        }
-        request.setAttribute("sortBy", sortId);
-        try {
-            page = ParameterGetter.getIntParam(request, "page");
-        } catch (ValidatorException ignored) {
-        }
-
-        int offset = (page - 1) * recordsPerPage;
-        List<Activity> activities = ActivityService.getInstance().getAllActivitiesSortedPaged(sortBy,recordsPerPage, offset);
-        int numOfRequests = ActivityService.getInstance().getCountOfActivities();
-        int noOfPages = (int) Math.ceil(numOfRequests * 1.0 / recordsPerPage);
-
-        request.setAttribute("noOfPages", noOfPages);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("activities", activities);
         request.setAttribute("categories", Category.values());
 
-        return ACTIVITIES_LIST_PAGE_JSP;
+        return  JSP_ADD_ACTIVITY_PAGE;
     }
+
 }

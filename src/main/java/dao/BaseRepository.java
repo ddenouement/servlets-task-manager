@@ -14,8 +14,8 @@ import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
 public  class BaseRepository {
     protected final DataSource ds;
 
-    public BaseRepository( ) {
-        this.ds = DataSourceFactory.getMySqlDatasource();
+    public BaseRepository( DataSource dataSource) {
+        this.ds = dataSource;
     }
     protected Connection getConnection() throws SQLException {
         Connection r = ds.getConnection();

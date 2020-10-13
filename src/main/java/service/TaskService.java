@@ -1,8 +1,6 @@
 package service;
 
-import dao.DaoException;
-import dao.UserActivityRepository;
-import dao.UserRepository;
+import dao.*;
 import javafx.concurrent.Task;
 import model.UserActivity;
 
@@ -11,11 +9,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class TaskService {
-    UserActivityRepository dao = UserActivityRepository.getInstance();
+    UserActivityRepository dao ;
 
     private static TaskService instance = new TaskService();
     private TaskService(){
-
+        RepositoryFactory repositoryFactory =
+                new RepositoryFactory(DataSourceFactory.getMySqlDatasource());
+        dao = repositoryFactory.userActivityRepository();
     }
     public static TaskService getInstance(){return instance;}
 

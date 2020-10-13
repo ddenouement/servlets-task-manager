@@ -1,5 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="WEB-INF/mytags.tld" prefix="m" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -27,7 +28,7 @@
 <c:if test="${sessionScope.userRole eq 'ADMIN'}">
 
             <li class="nav-item">
-                <p   class="navbar-text"> <c:out value="${sessionScope.user.login}"></c:out>
+                <p   class="navbar-text"> <m:username/>
                 </p>
             </li>
             <li class="nav-item"><a class="nav-link" href="/controller?command=users">USERS</a></li>
@@ -58,7 +59,7 @@
 <c:if test="${sessionScope.userRole eq 'USER'}">
 
             <li class="nav-item">
-                <p class="navbar-text"> <fmt:message key="user" />
+                <p class="navbar-text"> <m:username/>
                 </p>
             </li>
             <li class="nav-item"><a class="nav-link" href="controller?command=me"><fmt:message key="header.my_profile" /></a></li>

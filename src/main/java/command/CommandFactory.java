@@ -29,9 +29,11 @@ public class CommandFactory {
         commands.put("activities", new ListActivitiesCommand());
         commands.put("tasks", new ListUserTasksCommand());
         //admin
+        commands.put("addActivity", new CreateActivityCommand());
         commands.put("users", new ListUsersCommand());
         commands.put("createActivity", new ListActivitiesCommand());
         commands.put("editActivity", new EditActivityCommand());
+        commands.put("deleteActivity", new DeleteActivityCommand());
         commands.put("stats", new StatsCommand());
         commands.put("viewUser", new ViewUserCommand());
         commands.put("requests", new ListRequestsCommand());

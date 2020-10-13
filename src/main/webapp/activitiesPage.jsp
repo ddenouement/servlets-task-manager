@@ -33,53 +33,11 @@
 </div>
 </c:if>
 
-<div class="container">
-  <div class="row">
-
-    <div class="col-sm">
+<div class="container" style="width: 60%; margin: 0 auto;">
 
 <c:if test="${sessionScope.get('userRole') == 'ADMIN'}">
-
-<form id="create-activity" style="line-height: 10px" action="controller" method="POST" accept-charset="UTF-8">
-  <input type="hidden" name="command" value="createActivity" />
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input required type="text" class="form-control" id="name" name="name" >
-  </div>
-   <div class="form-group">
-      <label for="nameEn">Name English</label>
-      <input required type="text" class="form-control" id="nameEn" name="nameEn" >
-    </div>
-    <div class="form-group">
-        <label for="nameUa">Name Russian</label>
-        <input required type="text" class="form-control" id="nameUa" name="nameUa" >
-    </div>
-  <div class="form-group">
-    <label for="description">Description</label>
-    <input required type="text" name="description" class="form-control" id="description" >
-  </div>
-
-  <div class="form-group">
-    <label for="descriptionEn">Description English</label>
-    <input required type="text" name="descriptionEn" class="form-control" id="descriptionEn">
-  </div>
-    <div class="form-group">
-      <label for="descriptionUa">Description Russian</label>
-      <input required type="text" name="descriptionUa" class="form-control" id="descriptionUa">
-    </div>
-  <select name="category" class="form-control">
-      <c:forEach items="${categories}" var="cat">
-          <option value="${cat.name}" text="${cat.name}"><c:out value="${cat.name}"></c:out></option>
-      </c:forEach>
-  </select>
-
-  <button type="submit" class="btn btn-success">CREATE NEW</button>
-</form>
+    <a class="btn btn-success" href="/controller?command=addActivity">ADD NEW</a>
 </c:if>
-
-    </div>
-
-<div class="col-sm">
 
 <form  id="activities" action="controller" method="GET">
       			<input type="hidden" name="command" value="activities" />
@@ -94,6 +52,32 @@
 </form>
 
 
+
+
+<c:if test="${currentPage != 1}">
+       <a href="controller?command=activities&page=${currentPage - 1}">Previous</a>
+</c:if>
+<table border="1" cellpadding="5" cellspacing="5">
+        <tr>
+            <c:forEach begin="1" end="${noOfPages}" var="i">
+                <c:choose>
+                    <c:when test="${currentPage eq i}">
+                        <td>${i}</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><a href="controller?command=activities&page=${i}">${i}</a></td>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </tr>
+</table>
+<c:if test="${currentPage lt noOfPages}">
+        <td><a href="controller?command=activities&page=${currentPage + 1}">Next</a></td>
+</c:if>
+
+
+
+<div >
 <ul class="list-group">
   <c:forEach var="task" items="${activities}">
         <a class="list-group-item" href="<c:url value="controller?command=viewActivity"> <c:param name="id" value="${task.id}"/></c:url>">
@@ -103,7 +87,6 @@
         </a>
   </c:forEach>
   </ul>
-  </div>
   </div>
   </div>
 

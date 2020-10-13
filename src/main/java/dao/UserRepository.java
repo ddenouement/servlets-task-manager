@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import util.DBFields;
 import util.QueriesUser;
 
+import javax.sql.DataSource;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,14 +18,8 @@ import java.util.Optional;
 public class UserRepository extends BaseRepository {
     final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(UserActivityRepository.class);
 
-    private static final UserRepository instance = new UserRepository();
-
-    private UserRepository() {
-        super();
-    }
-
-    public static UserRepository getInstance() {
-        return instance;
+    UserRepository(DataSource ds) {
+        super(ds);
     }
 
     public Optional<User> register(User user) throws DaoException {

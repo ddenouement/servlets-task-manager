@@ -1,6 +1,8 @@
 package service;
 
 import dao.DaoException;
+import dao.DataSourceFactory;
+import dao.RepositoryFactory;
 import dao.UserRepository;
 import model.User;
 import model.UserActivity;
@@ -11,11 +13,13 @@ import java.util.Optional;
 
 public class UserService {
 
-    UserRepository dao = UserRepository.getInstance();
+    UserRepository dao ;//= UserRepository.getInstance();
 
     private static UserService instance = new UserService();
     private UserService(){
-
+        RepositoryFactory repositoryFactory =
+                new RepositoryFactory(DataSourceFactory.getMySqlDatasource());
+        dao = repositoryFactory.userRepository();
     }
     public static UserService getInstance(){return instance;}
 

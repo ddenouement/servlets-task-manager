@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import util.QueriesActivity;
 import util.QueriesTask;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,14 +17,8 @@ import java.util.Optional;
 public class ActivityRepository extends BaseRepository {
     final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(UserActivityRepository.class);
 
-    private ActivityRepository() {
-        super();
-    }
-
-    private static ActivityRepository instance = new ActivityRepository();
-
-    public static ActivityRepository getInstance() {
-        return instance;
+    ActivityRepository(DataSource d) {
+        super(d);
     }
 
     public Optional<Activity> findActivityById(int id) {
@@ -40,7 +35,7 @@ public class ActivityRepository extends BaseRepository {
                 found = mapRow(rs);
             }
         } catch (SQLException throwables) {
-            logger.warn( throwables.getLocalizedMessage());
+            logger.warn(throwables.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -63,7 +58,7 @@ public class ActivityRepository extends BaseRepository {
             activity.setPeopleAmount(rs.getInt("number_of_people"));
             return activity;
         } catch (SQLException e) {
-            logger.warn( e.getLocalizedMessage());
+            logger.warn(e.getLocalizedMessage());
             throw new IllegalStateException(e);
         }
     }
@@ -106,7 +101,7 @@ public class ActivityRepository extends BaseRepository {
                 found.add(mapRow(rs));
             }
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -138,7 +133,7 @@ public class ActivityRepository extends BaseRepository {
             close(rs);
             close(st);
             close(con);
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             throw new DaoException("Error updating activity");
         }
         return false;
@@ -169,7 +164,7 @@ public class ActivityRepository extends BaseRepository {
                 return Optional.of(activity);
             }
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             throw new DaoException("Error creating activity");
         } finally {
             close(rs);
@@ -179,15 +174,18 @@ public class ActivityRepository extends BaseRepository {
         return Optional.empty();
     }
 
-    public List<Activity> findActivitiesSorted(String sortBy) {
+    public List<Activity> findActivitiesSortedPaged(String sortBy, int limit, int offset) {
         List<Activity> found = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
         try {
             con = getConnection();
-            String sql = String.format(QueriesActivity.SQL_FIND_ALL_ACTIVITIES_SORTED, sortBy);
-            pstmt = con.prepareStatement(sql);
+            String formattedRequest =
+                   String.format(QueriesActivity.SQL_FIND_ALL_ACTIVITIES_SORTED_PAGED, sortBy)
+                    .replace("limitParam", "" + limit)
+                    .replace("offsetParam", "" + offset);
+            pstmt = con.prepareStatement(formattedRequest);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 if (found == null) found = new ArrayList<>();
@@ -197,7 +195,7 @@ public class ActivityRepository extends BaseRepository {
             close(pstmt);
             close(con);
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             close(rs);
             close(pstmt);
             close(con);
@@ -218,7 +216,7 @@ public class ActivityRepository extends BaseRepository {
                 res = rs.getInt("count");
             }
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -227,6 +225,26 @@ public class ActivityRepository extends BaseRepository {
         return res;
     }
 
+    public boolean deleteActivityCascade(int activityId)  throws DaoException{
+        Connection con = null;
+        PreparedStatement st = null;
+        try {
+            con = getConnection();
+            st = con.prepareStatement(QueriesActivity.SQL_DELETE_ACTIVITY);
+            st.setInt(1,activityId);
+            int i = st.executeUpdate();
+            if (i > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            logger.warn(ex.getLocalizedMessage());
+            throw new DaoException("Error deleting activity");
+        } finally {
+            close(st);
+            close(con);
+        }
+        return false;
+    }
 }
 
 

@@ -1,6 +1,8 @@
 command\impl\LanguageCommand.class
 controller\HomeController.class
+command\impl\admin\CreateActivityCommand.class
 dao\ActivityRepository.class
+util\MyTagHandler.class
 filter\ErrorsFilter.class
 service\RequestService.class
 filter\EncodingFilter.class
@@ -9,12 +11,14 @@ model\User.class
 command\impl\ViewActivityCommand.class
 command\impl\ListActivitiesCommand.class
 util\QueriesTask.class
+dao\RepositoryFactory.class
 command\impl\user\CreateRequestCommand.class
 dao\UserRepository.class
 util\QueriesUser.class
 command\impl\admin\DismissRequestCommand.class
 command\impl\auth\LogoutCommand.class
 util\SortActivitiesFields.class
+command\impl\admin\DeleteActivityCommand.class
 command\impl\auth\RegisterCommand.class
 model\Category.class
 util\QueriesActivity.class

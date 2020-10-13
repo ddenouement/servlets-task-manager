@@ -53,7 +53,7 @@ Current statistics:
   <div class="card-body">
   Average hours spent on activities:
   <c:forEach var="pair" items="${mapOfAverageTimes}">
-      ${pair.key} : ${pair.value} hrs
+      <br>${pair.key} : ${pair.value} hrs</br>
   </c:forEach>
   </div>
 </div>

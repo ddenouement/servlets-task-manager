@@ -24,12 +24,12 @@
 <c:import url="/header.jsp"></c:import>
 
 
-<c:if test="${errorMessage}">
+<c:if test="${errorMessage!=null}">
 <div class="alert alert-danger" style="display: inline-block" role="alert">
 <c:out value="${errorMessage}"/>
 </div>
 </c:if>
-<c:if test="${infoMessage}">
+<c:if test="${infoMessage!=null}">
 <div class="alert alert-success" style="display: inline-block" role="alert">
 <c:out value="${infoMessage}"/>
 </div>

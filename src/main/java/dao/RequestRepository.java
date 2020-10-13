@@ -4,6 +4,7 @@ import model.*;
 import org.apache.logging.log4j.LogManager;
 import util.QueriesRequest;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,17 +16,11 @@ import java.util.Optional;
 public class RequestRepository extends BaseRepository {
     final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(UserActivityRepository.class);
 
-    private RequestRepository() {
-        super();
+      RequestRepository(DataSource d) {
+        super(d);
     }
 
-    private static RequestRepository instance = new RequestRepository();
-
-    public static RequestRepository getInstance() {
-        return instance;
-    }
-
-    public List<Request> findAllRequestsByUserId(int userId) {
+     public List<Request> findAllRequestsByUserId(int userId) {
         List<Request> found = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -62,9 +57,11 @@ public class RequestRepository extends BaseRepository {
                 request.setCreatedAt(time);
             }
             int id_task = rs.getInt("id_user_activity");
-            UserActivity task = UserActivityRepository.getInstance()
+            RepositoryFactory repositoryFactory =
+                    new RepositoryFactory(DataSourceFactory.getMySqlDatasource());
+            UserActivity task = repositoryFactory.userActivityRepository()
                     .findTaskById(id_task)
-                    .orElseThrow(() -> new SQLException());
+                    .orElseThrow(SQLException::new);
             String status = rs.getString("status");
             String motif = rs.getString("motif");
             request.setTask(task);
@@ -315,7 +312,9 @@ public class RequestRepository extends BaseRepository {
         ResultSet rs = null;
         try {
             //check if he has unfinished same activity
-            boolean hasUnfinished = UserActivityRepository.getInstance().checkUserHasSameUnfinishedTask(userId, activityId);
+            RepositoryFactory repositoryFactory =
+                    new RepositoryFactory(DataSourceFactory.getMySqlDatasource());
+            boolean hasUnfinished = repositoryFactory.userActivityRepository().checkUserHasSameUnfinishedTask(userId, activityId);
             if (hasUnfinished) {
                 rollback(con);
                 throw new DaoException("You already have it unfinished");
@@ -401,7 +400,9 @@ public class RequestRepository extends BaseRepository {
             setAutoCommit(con, false);
 
             //find requested task
-            Optional<UserActivity> task = UserActivityRepository.getInstance().findTaskById(taskId);
+            RepositoryFactory repositoryFactory =
+                    new RepositoryFactory(DataSourceFactory.getMySqlDatasource());
+            Optional<UserActivity> task = repositoryFactory.userActivityRepository().findTaskById(taskId);
             if (!task.isPresent()) {
                 rollback(con);
                 throw new DaoException("You can not remove a task if you are not assigned to it");

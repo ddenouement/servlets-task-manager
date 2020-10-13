@@ -1,5 +1,9 @@
 package model;
 
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
     private int id;
     private String firstName;
@@ -7,11 +11,9 @@ public class User {
     private String email;
     private String login;
     private String password;
-  //  private Profession profession;
     private Role role;
-  //  private int roleId;
 
-    public User(){
+    public User() {
 
     }
 
@@ -20,7 +22,8 @@ public class User {
     }
 
     public void setRole(String role) {
-        this.role = Role.valueOf (role.toUpperCase());
+        if (role != null)
+            this.role = Role.valueOf(role.toUpperCase());
     }
 
     public int getId() {
@@ -28,9 +31,6 @@ public class User {
     }
 
 
- /*   public int getRoleId() {
-        return roleId;
-    }*/
 
     public String getEmail() {
         return email;
@@ -75,9 +75,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-/*   public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }*/
 
     @Override
     public String toString() {
@@ -87,7 +84,14 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
-                ", passwordEncoded='" + password + '\'' ;
-         //       ", roleId=" + roleId ;
+                ", passwordEncoded='" + password + '\'';
+    }
+
+    public Set<String> validate() {
+        Set<String> errors = new HashSet<>();
+        if (!email.matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+")) errors.add("validation.email_format");
+        if (!(login.length() > 5)) errors.add("validation.login_size");
+        if (!(password.length() > 5)) errors.add("validation.password_size");
+        return errors;
     }
 }

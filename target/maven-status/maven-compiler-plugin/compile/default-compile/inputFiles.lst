@@ -31,9 +31,11 @@ D:\epam20\AdvancedTaskTracker\src\main\java\command\util\ParameterGetter.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\user\FinishMyTaskCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\user\CreateRequestCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\dao\RequestRepository.java
+D:\epam20\AdvancedTaskTracker\src\main\java\dao\RepositoryFactory.java
 D:\epam20\AdvancedTaskTracker\src\main\java\model\Request.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\admin\ListUsersCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\CommandFactory.java
+D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\admin\DeleteActivityCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\user\ViewMyProfileCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\admin\AcceptRequestCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\util\QueriesActivity.java
@@ -49,6 +51,8 @@ D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\auth\RegisterCommand.ja
 D:\epam20\AdvancedTaskTracker\src\main\java\model\UserActivity.java
 D:\epam20\AdvancedTaskTracker\src\main\java\service\RequestService.java
 D:\epam20\AdvancedTaskTracker\src\main\java\dao\UserActivityRepository.java
+D:\epam20\AdvancedTaskTracker\src\main\java\util\MyTagHandler.java
 D:\epam20\AdvancedTaskTracker\src\main\java\util\QueriesTask.java
+D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\admin\CreateActivityCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\LanguageCommand.java
 D:\epam20\AdvancedTaskTracker\src\main\java\command\impl\user\ListUserTasksCommand.java

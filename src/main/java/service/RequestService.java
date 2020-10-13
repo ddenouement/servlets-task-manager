@@ -1,20 +1,20 @@
 package service;
 
-import dao.DaoException;
-import dao.RequestRepository;
-import dao.UserRepository;
+import dao.*;
 import model.Request;
 
 import java.util.List;
 
 public class RequestService {
 
-    RequestRepository dao = RequestRepository.getInstance();
+    RequestRepository dao ;
 
     private static RequestService instance = new RequestService();
 
     private RequestService() {
-
+        RepositoryFactory repositoryFactory =
+                new RepositoryFactory(DataSourceFactory.getMySqlDatasource());
+        dao = repositoryFactory.requestRepository();
     }
 
     public static RequestService getInstance() {
@@ -59,10 +59,10 @@ public class RequestService {
         }
     }
     public int getNumRequests(){
-        return RequestRepository.getInstance().getNumRequests();
+        return dao.getNumRequests();
     }
 
     public List<Request> getAllRequestsPaged(int limit, int page) {
-        return RequestRepository.getInstance().findAllRequestsPaged(limit, page);
+        return dao.findAllRequestsPaged(limit, page);
     }
 }

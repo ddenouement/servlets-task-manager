@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import util.QueriesTask;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,14 +20,9 @@ import java.util.Optional;
 public class UserActivityRepository extends BaseRepository {
 
     final static Logger logger = LogManager.getLogger(UserActivityRepository.class);
-    private static final UserActivityRepository instance = new UserActivityRepository();
 
-    private UserActivityRepository() {
-        super();
-    }
-
-    public static UserActivityRepository getInstance() {
-        return instance;
+    UserActivityRepository(DataSource d) {
+        super(d);
     }
 
 
@@ -75,7 +71,7 @@ public class UserActivityRepository extends BaseRepository {
                 tasks.add(mapRow(rs));
             }
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -101,7 +97,7 @@ public class UserActivityRepository extends BaseRepository {
                 throw new DaoException("Cannot set finished");
             }
         } catch (SQLException e) {
-            logger.warn( e.getLocalizedMessage());
+            logger.warn(e.getLocalizedMessage());
             throw new DaoException("Cannot set finished");
         } finally {
             close(rs);
@@ -126,7 +122,7 @@ public class UserActivityRepository extends BaseRepository {
                 task = mapRow(rs);
             }
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -149,7 +145,7 @@ public class UserActivityRepository extends BaseRepository {
                 return true;
             }
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -169,10 +165,12 @@ public class UserActivityRepository extends BaseRepository {
                 ZonedDateTime time = timestamp.toLocalDateTime().atZone(ZoneId.of("UTC"));
                 task.setFinishedOn(time);
             }
-            User user = UserRepository.getInstance()
+
+            RepositoryFactory rf = new RepositoryFactory(ds);
+            User user = rf.userRepository()
                     .findUserById(rs.getInt("id_user"))
                     .orElseThrow(() -> new SQLException("No such user exists!"));
-            Activity activity = ActivityRepository.getInstance()
+            Activity activity =rf.activityRepository()
                     .findActivityById(rs.getInt("id_activity"))
                     .orElseThrow(() -> new SQLException("No Task found"));
             task.setTimeSpentInHours(rs.getInt("time_elapsed_hrs"));
@@ -201,8 +199,7 @@ public class UserActivityRepository extends BaseRepository {
             }
         } catch (SQLException ex) {
             logger.warn(ex.getLocalizedMessage());
-        }
-        finally {
+        } finally {
             close(rs);
             close(pstmt);
             close(con);
