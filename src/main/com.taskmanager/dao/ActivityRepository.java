@@ -13,7 +13,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Repository that performs operations with Activity
+ * @Author Yuliia Aleksandrova
+ */
 public class ActivityRepository extends BaseRepository {
     final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(UserActivityRepository.class);
 

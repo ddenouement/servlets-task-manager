@@ -4,6 +4,7 @@ import commands.util.HttpAction;
 import commands.ICommand;
 import commands.util.ParameterGetter;
 import commands.util.PathUtils;
+import dto.UserDTO;
 import model.Role;
 import model.User;
 import service.ServiceException;
@@ -15,12 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
+/**
+ * Command to login
+ * @Author Yuliia Aleksandrova
+ */
 public class LoginCommand implements ICommand {
     private static final String LOGIN_PAGE_JSP = "loginPage.jsp";
     private static final String REDIRECT_ADMIN_STATS_PAGE = "/controller?command=stats";
     private static final String REDIRECT_USER_LIST_ACTIVITIES_PAGE = "/controller?command=activities";
     private static final String REDIRECT_LOGIN = "/controller?command=login";
+    private static final String LOGOUT_PAGE_JSP = "logout.jsp";
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action)  {
@@ -74,7 +79,7 @@ public class LoginCommand implements ICommand {
         if (Role.USER.getName().equals(userRole))
             redirect = REDIRECT_USER_LIST_ACTIVITIES_PAGE;
 
-        session.setAttribute("user", user);
+        session.setAttribute("user", user.getSimpleUserDTO());
         session.setAttribute("userRole", userRole);
 
         return redirect;
@@ -83,7 +88,11 @@ public class LoginCommand implements ICommand {
 
     private String doGet(HttpServletRequest request,
                          HttpServletResponse response) {
-        PathUtils.saveCurrentPath(request, response);
-        return LOGIN_PAGE_JSP;
+        UserDTO userDTO = (UserDTO) request.getSession(false).getAttribute("user");
+        if(userDTO!=null) {
+            PathUtils.saveCurrentPath(request, response);
+            return LOGIN_PAGE_JSP;
+        }
+        else return LOGOUT_PAGE_JSP;
     }
 }

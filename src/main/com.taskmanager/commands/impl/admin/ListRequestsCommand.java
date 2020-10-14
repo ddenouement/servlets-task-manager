@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Command to view requests from all users
+ * @Author Yuliia Aleksandrova
+ */
 public class ListRequestsCommand implements ICommand {
 
     private static final String REQUESTS_LIST_PAGE_JSP = "admin/request/listall.jsp";

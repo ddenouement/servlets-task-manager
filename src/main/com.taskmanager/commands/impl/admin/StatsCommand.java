@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+/**
+ * Command to view brief statistics
+ * @Author Yuliia Aleksandrova
+ */
 public class StatsCommand implements ICommand {
     private static String STATS_VIEW_JSP = "/admin/stats/view.jsp";
     @Override

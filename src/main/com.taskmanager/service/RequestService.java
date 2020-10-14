@@ -5,9 +5,15 @@ import model.Request;
 
 import java.util.List;
 
+/**
+ * Service for actions with Request
+ *
+ * @Author Yuliia Aleksandrova
+ */
+
 public class RequestService {
 
-    RequestRepository dao ;
+    RequestRepository dao;
 
     private static RequestService instance = new RequestService();
 
@@ -21,7 +27,7 @@ public class RequestService {
         return instance;
     }
 
-    public   int getNumberOfCreatedRequests() {
+    public int getNumberOfCreatedRequests() {
         return dao.getNumRequestsCreated();
     }
 
@@ -29,6 +35,7 @@ public class RequestService {
     public List<Request> getRequestsByUserId(int id) {
         return dao.findAllRequestsByUserId(id);
     }
+
     public boolean dismissRequestById(int id) throws ServiceException {
         try {
             return dao.dismissRequestById(id);
@@ -36,6 +43,7 @@ public class RequestService {
             throw new ServiceException(e.getMsg());
         }
     }
+
     public boolean acceptRequestById(int id) throws ServiceException {
         try {
             return dao.acceptRequestById(id);
@@ -44,21 +52,23 @@ public class RequestService {
         }
     }
 
-    public int createRemoveRequest(int taskId, int userId ) throws ServiceException {
+    public int createRemoveRequest(int taskId, int userId) throws ServiceException {
         try {
             return dao.createRemoveRequest(taskId, userId);
         } catch (DaoException e) {
             throw new ServiceException(e.getMsg());
         }
     }
-    public int createAddRequest(int actId, int userId ) throws ServiceException {
+
+    public int createAddRequest(int actId, int userId) throws ServiceException {
         try {
             return dao.createAddRequest(actId, userId);
         } catch (DaoException e) {
             throw new ServiceException(e.getMsg());
         }
     }
-    public int getNumRequests(){
+
+    public int getNumRequests() {
         return dao.getNumRequests();
     }
 

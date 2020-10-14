@@ -1,5 +1,8 @@
 package util;
-
+/**
+ * Class to store User Queries
+ * @Author Yuliia Aleksandrova
+ */
 public class QueriesUser {
     public static final String SQL_FIND_ALL_USERS = "select * from user where role = 'USER'";
 

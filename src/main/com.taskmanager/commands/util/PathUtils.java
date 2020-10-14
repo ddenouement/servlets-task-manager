@@ -3,10 +3,11 @@ package commands.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+/**
+ * Class that saves cureent path and retrieves saved path from HttpServletRequest
+ * @Author Yuliia Aleksandrova
+ */
 public class PathUtils {
-
-
 
    public static void saveCurrentPath(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(true);

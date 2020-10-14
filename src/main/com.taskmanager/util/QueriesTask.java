@@ -1,5 +1,8 @@
 package util;
-
+/**
+ * Class to store Task Queries
+ * @Author Yuliia Aleksandrova
+ */
 public class QueriesTask {
     public static final String SQL_FIND_TASKS_ON_ACTIVITY_BY_ID_BY_PROGRESS_NAME =
             "select user_activity.id  as task_id, progress, id_activity,   time_elapsed_hrs, date_end," +

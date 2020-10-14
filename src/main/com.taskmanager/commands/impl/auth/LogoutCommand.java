@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
+/**
+ * Command to logout
+ * @Author Yuliia Aleksandrova
+ */
 public class LogoutCommand implements ICommand {
     private static final String REDIRECT_MAIN_PAGE = "";
 
@@ -28,7 +31,6 @@ public class LogoutCommand implements ICommand {
         if (session != null)
             session.invalidate();
 
-        System.out.println("LOGOUT finished");
         return REDIRECT_MAIN_PAGE;
     }
 

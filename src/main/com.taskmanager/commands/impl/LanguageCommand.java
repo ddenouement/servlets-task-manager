@@ -7,7 +7,10 @@ import commands.util.PathUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+/**
+ * Command to switch languages
+ * @Author Yuliia Aleksandrova
+ */
 public class LanguageCommand implements ICommand {
 
     @Override

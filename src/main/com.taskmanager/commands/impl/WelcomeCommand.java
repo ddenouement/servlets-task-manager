@@ -6,7 +6,10 @@ import commands.util.PathUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * Command to view main page
+ * @Author Yuliia Aleksandrova
+ */
 public class WelcomeCommand implements ICommand {
 
     private static final String MAIN_PAGE_JSP = "index.jsp";

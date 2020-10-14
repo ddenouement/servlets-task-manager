@@ -1,27 +1,22 @@
 package model;
 
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-
+/**
+ * Model that represents Activity entity
+ * @Author Yuliia Aleksandrova
+ */
 public class Activity {
 
         private int id;
-
         private String name;
         private String nameEn;
         private String nameUa;
-
         private int peopleAmount;
-
-
         private String  description;
         private String  descriptionEn;
         private String  descriptionUa;
-
-
         private Category category;
-
         public Set<Request> requests = new HashSet<>();
         public Set<UserActivity> userActivities = new HashSet<>();
 

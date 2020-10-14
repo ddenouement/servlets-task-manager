@@ -1,9 +1,10 @@
 package model;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-
+/**
+ * Model that represents user_activity entity
+ * @Author Yuliia Aleksandrova
+ */
 public class UserActivity {
 
     private int id;

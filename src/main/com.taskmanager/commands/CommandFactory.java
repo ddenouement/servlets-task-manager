@@ -13,13 +13,15 @@ import commands.impl.user.ViewMyProfileCommand;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Contains all possible commands
+ * @Author Yuliia Aleksandrova
+ */
 public class CommandFactory {
     private static Map<String, ICommand> commands = new HashMap<>();
 
     static {
         //common
-
         commands.put("welcome", new WelcomeCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("login", new LoginCommand());
@@ -28,6 +30,7 @@ public class CommandFactory {
         commands.put("viewActivity", new ViewActivityCommand());
         commands.put("activities", new ListActivitiesCommand());
         commands.put("tasks", new ListUserTasksCommand());
+
         //admin
         commands.put("addActivity", new CreateActivityCommand());
         commands.put("users", new ListUsersCommand());
@@ -40,7 +43,7 @@ public class CommandFactory {
         commands.put("acceptRequest", new AcceptRequestCommand());
         commands.put("dismissRequest", new DismissRequestCommand());
 
-        //user;
+        //user
         commands.put("createRequest", new CreateRequestCommand());
         commands.put("me", new ViewMyProfileCommand());
         commands.put("finishTask", new FinishMyTaskCommand());

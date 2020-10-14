@@ -10,48 +10,56 @@ import model.UserActivity;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * Service for actions with User
+ *
+ * @Author Yuliia Aleksandrova
+ */
 public class UserService {
 
-    UserRepository dao ;//= UserRepository.getInstance();
+    UserRepository dao;
 
     private static UserService instance = new UserService();
-    private UserService(){
+
+    private UserService() {
         RepositoryFactory repositoryFactory =
                 new RepositoryFactory(DataSourceFactory.getMySqlDatasource());
         dao = repositoryFactory.userRepository();
     }
-    public static UserService getInstance(){return instance;}
 
-    public   int getCountOfUsers() {
+    public static UserService getInstance() {
+        return instance;
+    }
+
+    public int getCountOfUsers() {
         return dao.getNumberOfAllUsers();
     }
 
-    public User register (User u) throws ServiceException {
-
-        User registered ;
+    public User register(User u) throws ServiceException {
+        User registered;
         try {
-             registered = dao.register(u).orElseThrow(()->
-                     new ServiceException("Wrong input"));
+            registered = dao.register(u).orElseThrow(() ->
+                    new ServiceException("Wrong input"));
         } catch (DaoException e) {
             throw new ServiceException(e.getMsg());
         }
         return registered;
     }
-    public List<User> findAllUsers(){
+
+    public List<User> findAllUsers() {
         return dao.findAllUsers();
     }
 
-    public Optional<User> findUserById(int id){
+    public Optional<User> findUserById(int id) {
         return dao.findUserById(id);
     }
 
-    public Optional<User> findUserByLogin(String login){
+    public Optional<User> findUserByLogin(String login) {
         return dao.findUserByLogin(login);
     }
 
     public User login(String login, String password) throws ServiceException {
-        return dao.authorizeByPasswordAndLogin(login,password).orElseThrow(() -> new ServiceException("Invalid Credentials"));
+        return dao.authorizeByPasswordAndLogin(login, password).orElseThrow(() -> new ServiceException("Invalid Credentials"));
     }
 
 }

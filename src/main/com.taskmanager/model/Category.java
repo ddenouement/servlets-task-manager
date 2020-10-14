@@ -1,14 +1,12 @@
 package model;
 
-import java.util.HashSet;
-import java.util.Set;
+/**
+ * Enum that represents Category entity
+ * @Author Yuliia Aleksandrova
+ */
 
 public enum Category {
     DESIGN, DANCE, SPORT, DATABASES, OTHER;
-
-
-
-
     public static Category getByNumber(int i) {
         return Category.values()[i];
     }
@@ -22,7 +20,6 @@ public enum Category {
     public String toString(){
         return name();
     }
-
 
 }
 

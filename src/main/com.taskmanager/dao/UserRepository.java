@@ -11,10 +11,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Repository that performs operations with User
+ * @Author Yuliia Aleksandrova
+ */
 public class UserRepository extends BaseRepository {
     final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(UserActivityRepository.class);
 
@@ -145,19 +147,22 @@ public class UserRepository extends BaseRepository {
         return found;
     }
 
-    public User mapRow(ResultSet rs) {
+    public User mapRow(ResultSet rs) throws SQLException {
+
         try {
-            User user = new User();
-            user.setId(rs.getInt(DBFields.ID));
-            user.setLogin(rs.getString(DBFields.USER_LOGIN));
-            user.setPassword(rs.getString(DBFields.USER_PASSWORD));
-            user.setFirstName(rs.getString(DBFields.USER_FIRST_NAME));
-            user.setLastName(rs.getString(DBFields.USER_LAST_NAME));
-            user.setEmail(rs.getString("email"));
-            user.setRole(rs.getString("role"));
+            User user =   new User.Builder()
+                    .withId(rs.getInt(DBFields.ID))
+                    .withRole(rs.getString("role"))
+                    .withEmail(rs.getString("email"))
+                    .withFirstname(rs.getString(DBFields.USER_FIRST_NAME))
+                    .withLastname(rs.getString(DBFields.USER_LAST_NAME))
+                    .withLogin(rs.getString(DBFields.USER_LOGIN))
+                    .withPassword(rs.getString(DBFields.USER_PASSWORD))
+                    .build();
             return user;
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            logger.warn(e.getMessage());
+            throw e;
         }
     }
 

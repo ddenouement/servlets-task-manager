@@ -11,7 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.logging.Logger;
-
+/**
+ * Controller that uses Command and Post-Redirect-Get patterns
+ * Invokes command and redirect/forwards based on Http method
+ * @Author Yuliia Aleksandrova
+ */
 public class ServletController extends HttpServlet {
     private static final Logger log = Logger.getLogger(String.valueOf(ServletController.class));
 
@@ -30,21 +34,14 @@ public class ServletController extends HttpServlet {
 
         String commandName = request.getParameter("command");
         ICommand command = CommandFactory.getCommandByName(commandName);
-    /*    if(java.command == null ){
-            RequestDispatcher disp = request.getRequestDispatcher("index.jsp");
-            disp.forward(request, response);
-            return;
-        }*/
         String path = command.execute(request, response,action);
 
         //implementation of Post- Redirect - Get
         if (path != null) {
             if (action == HttpAction.GET) {
                 RequestDispatcher disp = request.getRequestDispatcher(path);
-
                 disp.forward(request, response);
             } else if (action == HttpAction.POST) {
-
                 response.sendRedirect(path);
             }
         }

@@ -11,7 +11,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
+/**
+ * Command to create a request for activity
+ * @Author Yuliia Aleksandrova
+ */
 public class CreateRequestCommand implements ICommand {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) throws IOException, ServletException {

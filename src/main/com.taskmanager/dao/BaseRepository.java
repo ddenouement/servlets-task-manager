@@ -1,16 +1,15 @@
 package dao;
 
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
-import jdk.nashorn.internal.runtime.Context;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
-
+/**
+ * Repository that is parent for other Repositories
+ * @Author Yuliia Aleksandrova
+ */
 public  class BaseRepository {
     protected final DataSource ds;
 

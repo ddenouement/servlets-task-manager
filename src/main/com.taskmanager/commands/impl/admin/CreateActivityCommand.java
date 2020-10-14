@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Command to create new activity
+ * @Author Yuliia Aleksandrova
+ */
 public class CreateActivityCommand implements ICommand {
 
     private static final String JSP_ADD_ACTIVITY_PAGE ="admin/activity/add.jsp";
-
     private static final String REDIRECT_ACTIVITIES_LIST_PAGE = "controller?command=activities";
 
     @Override
@@ -30,7 +33,13 @@ public class CreateActivityCommand implements ICommand {
         return result;
     }
 
-    //add new activity (ADMIN only)
+    /**
+     * Check for ADMIN role
+     * Get parameters from request and create Activity
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @return String
+     */
     private String doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         //check Admin privilege

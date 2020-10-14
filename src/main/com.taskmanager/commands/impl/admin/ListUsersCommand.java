@@ -3,6 +3,7 @@ package commands.impl.admin;
 import commands.util.HttpAction;
 import commands.ICommand;
 import commands.util.PathUtils;
+import dto.UserDTO;
 import model.User;
 import service.UserService;
 
@@ -11,7 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
+import java.util.stream.Collectors;
+/**
+ * Command to view all users with role USER
+ * @Author Yuliia Aleksandrova
+ */
 public class ListUsersCommand implements ICommand {
 
 
@@ -31,7 +36,10 @@ public class ListUsersCommand implements ICommand {
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
         PathUtils.saveCurrentPath(request,response);
 
-        List<User> users = UserService.getInstance().findAllUsers();
+        List<UserDTO> users = UserService.getInstance().findAllUsers()
+                .stream()
+                .map(User::getSimpleUserDTO)
+                .collect(Collectors.toList());
         request.setAttribute("users", users);
         return USERS_LIST_PAGE_JSP;
     }

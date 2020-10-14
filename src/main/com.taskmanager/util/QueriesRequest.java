@@ -1,6 +1,10 @@
 package util;
-
+/**
+ * Class to store Request Queries
+ * @Author Yuliia Aleksandrova
+ */
 public class QueriesRequest {
+
     public static final String SQL_FIND_NUM_CREATED_QUERIES = "select count(*) as count from request where status='CREATED'";
     public static final String SQL_FIND_REQUEST_BY_ID = "select * from request where id=?";
 

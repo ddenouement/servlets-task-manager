@@ -1,24 +1,21 @@
-package model;
+package dto;
 
-import dto.UserDTO;
-import java.util.HashSet;
-import java.util.Set;
+import model.Role;
+import model.User;
+
 /**
- * Model that represents User entity
- * @Author Yuliia Aleksandrova
+ * Class represents DTO for User
+ * it has all fields of User, excluding password
+ * @Author  Yuliia Aleksandrova
  */
-public class User {
+public class UserDTO {
     private int id;
     private String firstName;
     private String lastName;
     private String email;
     private String login;
-    private String password;
     private Role role;
 
-    public User() {
-
-    }
 
     public Role getRole() {
         return role;
@@ -50,9 +47,6 @@ public class User {
         return login;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -74,46 +68,13 @@ public class User {
         this.login = login;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", login='" + login + '\'' +
-                ", passwordEncoded='" + password + '\'';
-    }
-
-    public Set<String> validate() {
-        Set<String> errors = new HashSet<>();
-        if (!email.matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+")) errors.add("validation.email_format");
-        if (!(login.length() > 5)) errors.add("validation.login_size");
-        if (!(password.length() > 5)) errors.add("validation.password_size");
-        return errors;
-    }
-
-    public UserDTO getSimpleUserDTO() {
-        UserDTO userDTO = new UserDTO.Builder()
-                .withEmail(this.email)
-                .withFirstname(this.firstName)
-                .withLastname(this.lastName)
-                .withLogin(this.login)
-                .withId(this.id)
-                .withRole(this.role.getName())
-                .build();
-        return userDTO;
-    }
 
     public static class Builder {
-        private User user;
+        private UserDTO user;
 
         public Builder() {
-            this.user = new User();
+            this.user = new UserDTO();
         }
 
         public Builder withFirstname(String name) {
@@ -142,18 +103,14 @@ public class User {
             return this;
         }
 
-        public Builder withPassword(String password) {
-            user.password = password;
-            return this;
-        }
-
         public Builder withEmail(String email) {
             user.email = email;
             return this;
         }
 
-        public User build() {
+        public UserDTO build() {
             return user;
         }
     }
+
 }

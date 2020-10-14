@@ -1,8 +1,11 @@
 package service;
 
-
+/**
+ * Custom Exception to throw from Service Layer
+ * @Author Yuliia Aleksandrova
+ */
 public class ServiceException extends Exception{
-    public ServiceException(String msg){
+      ServiceException(String msg){
         super(msg);
     }
 }

@@ -16,7 +16,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Repository that performs operations with User_Activity
+ * @Author Yuliia Aleksandrova
+ */
 public class UserActivityRepository extends BaseRepository {
 
     final static Logger logger = LogManager.getLogger(UserActivityRepository.class);

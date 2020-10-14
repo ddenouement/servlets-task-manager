@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Command to view info about selected activity
+ * @Author Yuliia Aleksandrova
+ */
 public class ViewActivityCommand implements ICommand {
 
     private static final String JSP_VIEW_ACTIVITY_PAGE ="viewActivityPage.jsp";

@@ -9,7 +9,12 @@ import model.Activity;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for actions with Activity
+ * @Author Yuliia Aleksandrova
+ */
 public class ActivityService {
+
     ActivityRepository dao;
 
     private static ActivityService instance = new ActivityService();
@@ -62,7 +67,7 @@ public class ActivityService {
         try {
             return dao.deleteActivityCascade(activityId);
         } catch (DaoException e) {
-            throw  new ServiceException(e.getMsg());
+            throw new ServiceException(e.getMsg());
         }
     }
 }

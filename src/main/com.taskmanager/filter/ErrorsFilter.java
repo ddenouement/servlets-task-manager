@@ -4,7 +4,10 @@ package filter;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
+/**
+ * Filter to move error and info attributes from session to request
+ * @Author Yuliia Aleksandrova
+ */
 public class ErrorsFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

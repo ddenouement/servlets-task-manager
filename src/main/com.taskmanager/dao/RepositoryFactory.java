@@ -1,10 +1,12 @@
 package dao;
 
-
-
 import javax.sql.DataSource;
-
+/**
+ * Repository that can return multiple Repositories
+ * @Author Yuliia Aleksandrova
+ */
 public class RepositoryFactory {
+
     private DataSource ds;
 
     public RepositoryFactory(DataSource dataSource) {

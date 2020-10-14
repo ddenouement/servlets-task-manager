@@ -1,18 +1,24 @@
 package model;
 
-public enum  Role {
+/**
+ * Enum that represents Role entity
+ *
+ * @Author Yuliia Aleksandrova
+ */
+public enum Role {
 
-        USER, ADMIN;
+    USER, ADMIN;
 
-        public static Role getByNumber(int i) {
-
-            return Role.values()[i];
-        }
-    public int getInt(){
-        return ordinal()+1;
+    public static Role getByNumber(int i) {
+        return Role.values()[i];
     }
-        public String getName() {
-            return name();
-        }
+
+    public int getInt() {
+        return ordinal() + 1;
+    }
+
+    public String getName() {
+        return name();
+    }
 
 }

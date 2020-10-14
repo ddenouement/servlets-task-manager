@@ -11,6 +11,10 @@ import sun.security.validator.ValidatorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command to delete existing activity
+ * @Author Yuliia Aleksandrova
+ */
 public class DeleteActivityCommand implements ICommand {
 
      private static final String REDIRECT_ACTIVITIES_LIST_PAGE = "controller?command=activities";

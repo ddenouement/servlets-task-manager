@@ -2,17 +2,18 @@ package model;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Model that represents Request entity
+ *
+ * @Author Yuliia Aleksandrova
+ */
 public class Request {
 
     private int id;
     private ZonedDateTime createdAt;
-
     private User user;
-
-     private Status status;
-  private Motif motif;
-  private Activity activity;
-
+    private Status status;
+    private Motif motif;
     private UserActivity task;
 
     public int getId() {
@@ -70,8 +71,7 @@ public class Request {
                 ", createdAt=" + createdAt +
                 ", user=" + user +
                 ", status=" + status +
-                ", motif=" + motif +
-                ", activity=" + activity +
+                ", motif=" + motif  +
                 '}';
     }
 }

@@ -13,14 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository that performs operations with Requests
+ * @Author Yuliia Aleksandrova
+ */
+
 public class RequestRepository extends BaseRepository {
+
     final static org.apache.logging.log4j.Logger logger = LogManager.getLogger(UserActivityRepository.class);
 
-      RequestRepository(DataSource d) {
+    RequestRepository(DataSource d) {
         super(d);
     }
 
-     public List<Request> findAllRequestsByUserId(int userId) {
+    public List<Request> findAllRequestsByUserId(int userId) {
         List<Request> found = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -96,7 +102,7 @@ public class RequestRepository extends BaseRepository {
             close(pstmt);
             close(con);
         } catch (SQLException ex) {
-           logger.warn(ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             close(rs);
             close(pstmt);
             close(con);
@@ -133,7 +139,7 @@ public class RequestRepository extends BaseRepository {
             commit(con);
         } catch (SQLException ex) {
             rollback(con);
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             throw new DaoException("Could not dismiss request");
         } finally {
             close(stDel);
@@ -146,8 +152,8 @@ public class RequestRepository extends BaseRepository {
     public boolean acceptRequestById(int id) throws DaoException {
 
         Optional<Request> request = findRequestById(id);
-        if(!request.isPresent()){
-            throw new DaoException ("Error! This request doesnt exist");
+        if (!request.isPresent()) {
+            throw new DaoException("Error! This request doesnt exist");
 
         }
 
@@ -203,7 +209,7 @@ public class RequestRepository extends BaseRepository {
             commit(conn);
         } catch (SQLException ex) {
 
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             rollback(conn);
             throw new DaoException("Error! Could not add to activity and update request");
         } finally {
@@ -290,7 +296,7 @@ public class RequestRepository extends BaseRepository {
                 found = mapRow(rs);
             }
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
         } finally {
             close(rs);
             close(pstmt);
@@ -494,7 +500,7 @@ public class RequestRepository extends BaseRepository {
             close(pstmt);
             close(con);
         } catch (SQLException ex) {
-            logger.warn( ex.getLocalizedMessage());
+            logger.warn(ex.getLocalizedMessage());
             close(rs);
             close(pstmt);
             close(con);

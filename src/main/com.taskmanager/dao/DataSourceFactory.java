@@ -4,7 +4,10 @@ import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import javax.sql.DataSource;
-
+/**
+ * Class that can return multiple DataSources
+ * @Author Yuliia Aleksandrova
+ */
 public class DataSourceFactory {
 
     public static DataSource getMySqlDatasource() {

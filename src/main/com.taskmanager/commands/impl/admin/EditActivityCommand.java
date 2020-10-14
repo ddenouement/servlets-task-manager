@@ -10,7 +10,10 @@ import service.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
-
+/**
+ * Command to edit existing activity
+ * @Author Yuliia Aleksandrova
+ */
 public class EditActivityCommand implements ICommand {
     private static String REDIRECT_ON_VIEW_ACTIVITY_PAGE = "controller?command=viewActivity";
 

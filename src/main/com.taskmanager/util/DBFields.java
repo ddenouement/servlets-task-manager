@@ -1,5 +1,8 @@
 package util;
-
+/**
+ * Class for storing fields from database
+ * @Author Yuliia Aleksandrova
+ */
 public class DBFields {
     public static final String ID = "id";
     public static final String NAME = "name";

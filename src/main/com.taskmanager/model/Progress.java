@@ -1,9 +1,9 @@
 package model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-
+/**
+ * Enum that represents Progress entity
+ * @Author Yuliia Aleksandrova
+ */
 public enum Progress {
     REQUESTED, ASSIGNED, FINISHED, CANCELLED;
 

@@ -3,6 +3,7 @@ package commands.impl.auth;
 import commands.util.HttpAction;
 import commands.ICommand;
 import commands.util.PathUtils;
+import dto.UserDTO;
 import model.User;
 import service.ServiceException;
 import service.UserService;
@@ -15,13 +16,16 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+/**
+ * Command to register as a new user
+ * @Author Yuliia Aleksandrova
+ */
 public class RegisterCommand implements ICommand {
 
     private static final String REDIRECT_REGISTER_PAGE = "controller?command=register";
     private static final String REDIRECT_LOGIN_PAGE = "controller?command=login";
     private static final String REGISTER_PAGE_JSP = "registerPage.jsp";
-
+    private static final String LOGOUT_PAGE_JSP = "logout.jsp";
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response, HttpAction actionType) {
@@ -60,13 +64,14 @@ public class RegisterCommand implements ICommand {
             return REDIRECT_REGISTER_PAGE;
         } else {
             //create user object
-            User user = new User();
-            user.setRole(role);
-            user.setEmail(email);
-            user.setFirstName(name);
-            user.setPassword(password);
-            user.setLastName(lastname);
-            user.setLogin(login);
+            User user = new User.Builder()
+                    .withRole(role)
+                    .withEmail(email)
+                    .withFirstname(name)
+                    .withLastname(lastname)
+                    .withLogin(login)
+                    .withPassword(password)
+                    .build();
 
             //Validate created User object, before going to Database
             Set<String> validationMessages = user.validate();
@@ -100,7 +105,11 @@ public class RegisterCommand implements ICommand {
 
     private String doGet(HttpServletRequest request,
                          HttpServletResponse response) {
-        PathUtils.saveCurrentPath(request, response);
-        return REGISTER_PAGE_JSP;
+        UserDTO userDTO = (UserDTO) request.getSession(false).getAttribute("user");
+       if(userDTO==null) {
+           PathUtils.saveCurrentPath(request, response);
+           return REGISTER_PAGE_JSP;
+       }
+       else return LOGOUT_PAGE_JSP;
     }
 }
