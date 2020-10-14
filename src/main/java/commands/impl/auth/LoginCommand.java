@@ -10,7 +10,6 @@ import model.Role;
 import model.User;
 import service.ServiceException;
 import service.UserService;
-import sun.security.validator.ValidatorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

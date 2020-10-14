@@ -7,7 +7,6 @@ import commands.util.PathUtils;
 import commands.util.ParameterGetter;
 import service.RequestService;
 import service.ServiceException;
-import sun.security.validator.ValidatorException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

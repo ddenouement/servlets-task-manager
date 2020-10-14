@@ -11,7 +11,6 @@ import model.Role;
 import model.User;
 import service.RequestService;
 import service.UserService;
-import sun.security.validator.ValidatorException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

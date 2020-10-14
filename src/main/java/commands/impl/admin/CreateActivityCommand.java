@@ -13,7 +13,6 @@ import model.Role;
 import service.ActivityService;
 import service.CategoryService;
 import service.ServiceException;
-import sun.security.validator.ValidatorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

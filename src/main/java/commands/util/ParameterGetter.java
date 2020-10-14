@@ -1,10 +1,7 @@
 package commands.util;
 
 
-import sun.security.validator.ValidatorException;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.regex.PatternSyntaxException;
 
 /**
  * Util class to get int or String parameter from HttpRequest
