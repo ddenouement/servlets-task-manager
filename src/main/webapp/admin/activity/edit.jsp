@@ -60,9 +60,9 @@
       <label for="description">Description Ukrainian</label>
       <input required type="text" name="descriptionUa" class="form-control" id="descriptionUa" value="${activity.descriptionUa}" >
     </div>
-  <select name="category" class="form-control">
+  <select name="categoryId" class="form-control">
       <c:forEach items="${categories}" var="cat">
-          <option value="${cat.name}" text="${cat.name}" ${cat eq activity.category ? 'selected="selected"' : ''}><c:out value="${cat.name}"></c:out></option>
+          <option value="${cat.id}" text="${cat.name}" ${cat.id eq activity.category.id ? 'selected="selected"' : ''}><c:out value="${cat.name}"></c:out></option>
       </c:forEach>
   </select>
 

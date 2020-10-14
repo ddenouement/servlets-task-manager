@@ -31,7 +31,7 @@
 </div>
 </c:if>
 
-<div style="margin: auto">
+<div style="margin: auto; width: 60%;">
 <c:if test="${currentPage != 1}">
        <a href="controller?command=requests&page=${currentPage - 1}">Previous</a>
 </c:if>

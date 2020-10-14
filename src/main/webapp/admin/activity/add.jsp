@@ -37,7 +37,7 @@
 <c:if test="${sessionScope.get('userRole') == 'ADMIN'}">
 
 <form id="create-activity" style="line-height: 10px" action="controller" method="POST" accept-charset="UTF-8">
-  <input type="hidden" name="command" value="createActivity" />
+  <input type="hidden" name="command" value="addActivity" />
   <div class="form-group">
     <label for="name">Name</label>
     <input required type="text" class="form-control" id="name" name="name" >
@@ -60,12 +60,12 @@
     <input required type="text" name="descriptionEn" class="form-control" id="descriptionEn">
   </div>
     <div class="form-group">
-      <label for="descriptionUa">Description Russian</label>
+      <label for="descriptionUa">Description Ukrainian</label>
       <input required type="text" name="descriptionUa" class="form-control" id="descriptionUa">
     </div>
-  <select name="category" class="form-control">
+  <select name="categoryId" class="form-control">
       <c:forEach items="${categories}" var="cat">
-          <option value="${cat.name}" text="${cat.name}"><c:out value="${cat.name}"></c:out></option>
+          <option value="${cat.id}" text="${cat.name}"><c:out value="${cat.name}"></c:out></option>
       </c:forEach>
   </select>
 

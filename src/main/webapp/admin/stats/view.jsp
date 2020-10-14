@@ -32,28 +32,32 @@
 </div>
 </c:if>
 <div style="margin: auto; width: 60%;">
-Current statistics:
+  <p><span class="label label-warning">Current statistics:</span></p>
 <div class="card">
   <div class="card-body">
-    Number of users: <c:out value="${numUsers}"/>
+    <div class="alert alert-info" role="alert">Number of users: <c:out value="${numUsers}"/></div>
   </div>
 </div>
 <div class="card">
   <div class="card-body">
-    Number of requests waiting: <c:out value="${numRequestsWaiting}"/>
+    <div class="alert alert-info" role="alert">Number of requests waiting:  <c:out value="${numRequestsWaiting}"/></div>
   </div>
 </div>
 <div class="card">
   <div class="card-body">
-    Number of activities: <c:out value="${numActivities}"/>
+    <div class="alert alert-info" role="alert">Number of activities: <c:out value="${numActivities}"/></div>
   </div>
 </div>
 
 <div class="card">
   <div class="card-body">
-  Average hours spent on activities:
+    <div class="alert alert-info" role="alert">Average hours spent on activities:</div>
   <c:forEach var="pair" items="${mapOfAverageTimes}">
-      <br>${pair.key} : ${pair.value} hrs</br>
+      <div class="card">
+        <div class="card-body">
+             <br>${pair.key} : ${pair.value} hrs</br>
+        </div>
+      </div>
   </c:forEach>
   </div>
 </div>

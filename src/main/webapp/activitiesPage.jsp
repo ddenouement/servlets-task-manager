@@ -36,7 +36,8 @@
 <div class="container" style="width: 60%; margin: 0 auto;">
 
 <c:if test="${sessionScope.get('userRole') == 'ADMIN'}">
-    <a class="btn btn-success" href="/controller?command=addActivity">ADD NEW</a>
+    <a class="btn btn-success" href="/controller?command=addActivity">ADD ACTIVITY</a>
+    <a class="btn btn-success" href="/controller?command=addCategory">ADD CATEGORY</a>
 </c:if>
 
 <form  id="activities" action="controller" method="GET">
@@ -55,7 +56,7 @@
 
 
 <c:if test="${currentPage != 1}">
-       <a href="controller?command=activities&page=${currentPage - 1}">Previous</a>
+       <a href="controller?command=activities&page=${currentPage - 1}&sortBy=${sortBy}">Previous</a>
 </c:if>
 <table border="1" cellpadding="5" cellspacing="5">
         <tr>
@@ -65,14 +66,14 @@
                         <td>${i}</td>
                     </c:when>
                     <c:otherwise>
-                        <td><a href="controller?command=activities&page=${i}">${i}</a></td>
+                        <td><a href="controller?command=activities&page=${i}&sortBy=${sortBy}">${i}</a></td>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
         </tr>
 </table>
 <c:if test="${currentPage lt noOfPages}">
-        <td><a href="controller?command=activities&page=${currentPage + 1}">Next</a></td>
+        <td><a href="controller?command=activities&page=${currentPage + 1}&sortBy=${sortBy}">Next</a></td>
 </c:if>
 
 
@@ -81,7 +82,7 @@
 <ul class="list-group">
   <c:forEach var="task" items="${activities}">
         <a class="list-group-item" href="<c:url value="controller?command=viewActivity"> <c:param name="id" value="${task.id}"/></c:url>">
-        <h3><c:out value="${lang eq 'ua'? task.nameUa : task.nameEn}"></c:out> <span class="badge badge-info"><fmt:message key="${task.category.name}"/></span> </h3>
+        <h3><c:out value="${lang eq 'ua'? task.nameUa : task.nameEn}"></c:out> <span class="badge badge-info"> <c:out value="${lang eq 'ua'? task.category.nameUa : task.category.nameEn}"></c:out></span> </h3>
         <p><c:out value="${lang eq 'ua'? task.descriptionUa : task.descriptionEn}"></c:out></p>
          <p><fmt:message key="people_working" /> <c:out value="${task.peopleAmount}"></c:out></p>
         </a>

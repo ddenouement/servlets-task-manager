@@ -37,7 +37,7 @@
 
 
                 <form name="login-form"method="post" action="controller" >
-                            <input type="hidden" name="java.command" value="login"/>
+                            <input type="hidden" name="command" value="login"/>
                   <input type="text" name="login">
                   <input type="password" name="password">
 
