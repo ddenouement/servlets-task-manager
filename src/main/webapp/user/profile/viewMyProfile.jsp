@@ -49,7 +49,7 @@
   <div class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">  <c:out value="${req.status}"></c:out></h5>
-      <small>  <c:out value="${req.createdAt}"></c:out></small>
+      <small> <fmt:formatDate type="date" value="${req.createdAt}"/> </small>
     </div>
 	<p class="mb-1"> <c:out value="${req.motif}"></c:out> <c:out value="${req.activity.name}"></c:out>	</p>
 

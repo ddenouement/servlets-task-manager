@@ -105,7 +105,9 @@
         <fmt:message key="${task.progress.name}" />
 		</td>
      <td>
-		<c:out value="${task.finishedOn}"></c:out>
+        <c:if test="${not empty task.finishedOn}">
+	    	<fmt:formatDate type="date" value="${task.finishedOn}"/>
+		</c:if>
 	 </td>
 	 <td>
         <c:out value="${task.timeSpentInHours}"></c:out>

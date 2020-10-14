@@ -9,13 +9,12 @@ import java.io.IOException;
  */
 public class EncodingFilter implements Filter {
 
-    private String encoding;
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
 
-        request.setCharacterEncoding(encoding);
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding(encoding);
+        response.setCharacterEncoding("UTF-8");
         chain.doFilter(request, response);
     }
 
@@ -25,7 +24,7 @@ public class EncodingFilter implements Filter {
     }
 
     public void init(FilterConfig fConfig)  {
-        encoding = fConfig.getInitParameter("encoding");
+
     }
 
 }

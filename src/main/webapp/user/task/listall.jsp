@@ -34,17 +34,17 @@
 </c:if>
 
 
-<ul>
+<ul class="list-group">
 <c:forEach var="task" items="${tasks}">
   <c:if test="${task.progress.name != 'CANCELLED'}">
 
-    <li>
+    <li class="list-group-item">
         <p><fmt:message key="activity"/>: <c:out value="${lang eq 'ua' ? task.activity.nameUa : task.activity.nameEn }"/></p>
         <p><fmt:message key="description"/>: <c:out value="${lang eq 'ua'? task.activity.descriptionUa : task.activity.descriptionEn }"/></p>
         <p><fmt:message key="progress"/>: <fmt:message key="${task.progress.name}"/>  </p>
         <c:if test="${(task.progress.name eq 'FINISHED')}">
                 <p><fmt:message key="hours"/> <c:out value="${task.timeSpentInHours}"/></p>
-                <p><fmt:message key="date_finished"/><c:out value="${task.finishedOn}"/></p>
+                <p><fmt:message key="date_finished"/> <fmt:formatDate type="date" value="${task.finishedOn}"/> </p>
         </c:if>
 
         <c:if test="${(sessionScope.get('user').id == currentUserId) && (task.progress.name != 'REQUESTED' && task.progress.name != 'FINISHED')}">

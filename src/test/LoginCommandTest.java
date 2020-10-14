@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.*;
 
@@ -35,6 +35,7 @@ public class LoginCommandTest {
 
     @Test
     public void givenPasswordAndLoginNull_whenLogin_shouldRedirectLogin() {
+
         when((mockedRequest.getParameter("user"))).thenReturn(null);
         when(mockedRequest.getParameter("password")).thenReturn(null);
         when(mockedRequest.getSession(true)).thenReturn(mockedSession);

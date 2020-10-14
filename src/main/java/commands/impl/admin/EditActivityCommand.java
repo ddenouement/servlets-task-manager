@@ -5,6 +5,7 @@ import commands.ICommand;
 import commands.util.PathUtils;
 import model.Activity;
 import model.Category;
+import model.Role;
 import service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +66,11 @@ public class EditActivityCommand implements ICommand {
     }
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
+
+        String role =  (String) request.getSession().getAttribute("userRole");
+        if(role==null||Role.valueOf(role.toUpperCase())!= Role.ADMIN){
+            return null;
+        }
 
         PathUtils.saveCurrentPath(request, response);
 

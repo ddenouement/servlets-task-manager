@@ -1,6 +1,7 @@
 package model;
 
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 /**
  * Model that represents Request entity
@@ -48,8 +49,8 @@ public class Request {
         return status;
     }
 
-    public ZonedDateTime getCreatedAt() {
-        return createdAt;
+    public Date getCreatedAt() {
+        return Date.from(createdAt.toInstant());
     }
 
     public void setCreatedAt(ZonedDateTime createdAt) {

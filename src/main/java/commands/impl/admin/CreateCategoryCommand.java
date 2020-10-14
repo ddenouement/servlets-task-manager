@@ -2,20 +2,18 @@ package commands.impl.admin;
 
 import commands.ICommand;
 import commands.util.HttpAction;
-import commands.util.ParameterGetter;
-import commands.util.PathUtils;
-import model.Activity;
 import model.Category;
-import service.ActivityService;
+import model.Role;
 import service.CategoryService;
 import service.ServiceException;
-import sun.security.validator.ValidatorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-
+/**
+ * Command to create new category
+ * @Author Yuliia Aleksandrova
+ */
 public class CreateCategoryCommand implements ICommand {
 
     private static final String JSP_ADD_CATEGORY_PAGE = "admin/category/add.jsp";
@@ -65,6 +63,10 @@ public class CreateCategoryCommand implements ICommand {
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
 
+        String role =  (String) request.getSession().getAttribute("userRole");
+        if(role==null||Role.valueOf(role.toUpperCase())!= Role.ADMIN){
+            return null;
+        }
         return JSP_ADD_CATEGORY_PAGE;
     }
 }

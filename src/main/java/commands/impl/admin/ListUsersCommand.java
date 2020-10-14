@@ -4,6 +4,7 @@ import commands.util.HttpAction;
 import commands.ICommand;
 import commands.util.PathUtils;
 import dto.UserDTO;
+import model.Role;
 import model.User;
 import service.UserService;
 
@@ -34,6 +35,11 @@ public class ListUsersCommand implements ICommand {
     }
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
+        String role =  (String) request.getSession().getAttribute("userRole");
+        if(role==null||Role.valueOf(role.toUpperCase())!= Role.ADMIN){
+           return null;
+        }
+
         PathUtils.saveCurrentPath(request,response);
 
         List<UserDTO> users = UserService.getInstance().findAllUsers()

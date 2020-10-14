@@ -1,8 +1,9 @@
-package commands.impl;
+package commands.impl.common;
 
 import commands.util.HttpAction;
 import commands.ICommand;
 import commands.util.PathUtils;
+import dto.UserDTO;
 import model.*;
 import service.ActivityService;
 import service.TaskService;
@@ -31,6 +32,11 @@ public class ViewActivityCommand implements ICommand {
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
 
         PathUtils.saveCurrentPath(request, response);
+
+        UserDTO user_in_session = (UserDTO) request.getSession().getAttribute("user");
+        if (user_in_session == null){
+            return null;
+        }
 
         int activityId = Integer.parseInt(request.getParameter("id"));
         Optional<Activity> activity = ActivityService.getInstance()

@@ -12,7 +12,6 @@ filter\ErrorsFilter.class
 commands\impl\admin\CreateActivityCommand.class
 commands\util\ParameterException.class
 commands\impl\admin\AcceptRequestCommand.class
-commands\impl\ListActivitiesCommand.class
 service\RequestService.class
 commands\impl\admin\ListUsersCommand.class
 commands\impl\LanguageCommand.class
@@ -22,8 +21,8 @@ util\QueriesCategory.class
 util\QueriesTask.class
 dao\RepositoryFactory.class
 dao\UserRepository.class
-commands\impl\ViewActivityCommand.class
 util\QueriesUser.class
+commands\impl\common\ListActivitiesCommand.class
 model\User$Builder.class
 util\SortActivitiesFields.class
 model\Category.class
@@ -49,6 +48,7 @@ model\Motif.class
 commands\impl\admin\DismissRequestCommand.class
 model\Progress.class
 commands\impl\admin\ViewUserCommand.class
+commands\impl\common\ViewActivityCommand.class
 service\ServiceException.class
 commands\CommandFactory.class
 commands\impl\auth\LoginCommand.class

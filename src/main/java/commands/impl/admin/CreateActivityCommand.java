@@ -9,6 +9,7 @@ import dao.DataSourceFactory;
 import dao.RepositoryFactory;
 import model.Activity;
 import model.Category;
+import model.Role;
 import service.ActivityService;
 import service.CategoryService;
 import service.ServiceException;
@@ -21,20 +22,21 @@ import java.util.List;
 
 /**
  * Command to create new activity
+ *
  * @Author Yuliia Aleksandrova
  */
 public class CreateActivityCommand implements ICommand {
 
-    private static final String JSP_ADD_ACTIVITY_PAGE ="admin/activity/add.jsp";
+    private static final String JSP_ADD_ACTIVITY_PAGE = "admin/activity/add.jsp";
     private static final String REDIRECT_ACTIVITIES_LIST_PAGE = "controller?command=activities";
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action)  {
+    public String execute(HttpServletRequest request, HttpServletResponse response, HttpAction action) {
         String result = null;
         if (HttpAction.POST == action) {
             result = doPost(request, response);
 
-        }else if (action == HttpAction.GET) {
+        } else if (action == HttpAction.GET) {
             result = doGet(request, response);
         }
         return result;
@@ -43,7 +45,8 @@ public class CreateActivityCommand implements ICommand {
     /**
      * Check for ADMIN role
      * Get parameters from request and create Activity
-     * @param request HttpServletRequest
+     *
+     * @param request  HttpServletRequest
      * @param response HttpServletResponse
      * @return String
      */
@@ -59,8 +62,8 @@ public class CreateActivityCommand implements ICommand {
             String nameEn = request.getParameter("nameEn");
             String nameUa = request.getParameter("nameUa");
             String name = request.getParameter("name");
-            int id_category  = 1;
-            try{
+            int id_category = 1;
+            try {
                 id_category = ParameterGetter.getIntParam(request, "categoryId");
             } catch (ParameterException e) {
                 request.getSession(true).setAttribute("errorMessage", "Error with parameter category");
@@ -75,7 +78,7 @@ public class CreateActivityCommand implements ICommand {
             activity.setDescriptionUa(descrUa);
             activity.setDescription(descr);
 
-            try{
+            try {
                 ActivityService.getInstance().createActivity(activity);
                 request.getSession().setAttribute("infoMessage", "You created activity successfully");
             } catch (ServiceException e) {
@@ -87,12 +90,15 @@ public class CreateActivityCommand implements ICommand {
     }
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
-        PathUtils.saveCurrentPath(request, response);
+        String role = (String) request.getSession().getAttribute("userRole");
+        if (Role.valueOf(role.toUpperCase()) != Role.ADMIN) {
+            return null;
+        }
 
-        List<Category> categories  =  CategoryService.getInstance().getAllCategories();
+        List<Category> categories = CategoryService.getInstance().getAllCategories();
         request.setAttribute("categories", categories);
 
-        return  JSP_ADD_ACTIVITY_PAGE;
+        return JSP_ADD_ACTIVITY_PAGE;
     }
 
 }

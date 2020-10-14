@@ -1,4 +1,4 @@
-package commands.impl;
+package commands.impl.common;
 
 import commands.util.HttpAction;
 import commands.ICommand;
@@ -6,6 +6,7 @@ import commands.util.ParameterException;
 import commands.util.ParameterGetter;
 import commands.util.PathUtils;
 
+import dto.UserDTO;
 import model.Activity;
 import model.Category;
 import service.ActivityService;
@@ -43,6 +44,11 @@ public class ListActivitiesCommand implements ICommand {
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
         PathUtils.saveCurrentPath(request, response);
+
+        UserDTO user_in_session = (UserDTO) request.getSession().getAttribute("user");
+        if (user_in_session == null){
+            return null;
+        }
 
         SortActivitiesFields defaultSort = SortActivitiesFields.ACTIVITY_NAME;
         String sortBy = defaultSort.getValue();

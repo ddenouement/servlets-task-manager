@@ -4,6 +4,7 @@ import commands.util.HttpAction;
 import commands.ICommand;
 import commands.util.PathUtils;
 
+import model.Role;
 import model.UserActivity;
 import service.ActivityService;
 import service.RequestService;
@@ -30,15 +31,20 @@ public class StatsCommand implements ICommand {
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
 
+        String role =  (String) request.getSession().getAttribute("userRole");
+        if(role==null || Role.valueOf(role.toUpperCase())!= Role.ADMIN){
+            return null;
+        }
         PathUtils.saveCurrentPath(request,response);
         int countOfRequestsWaiting = RequestService.getInstance().getNumberOfCreatedRequests();
         int countOfUsers = UserService.getInstance().getCountOfUsers();
         int countOfActivities = ActivityService.getInstance().getCountOfActivities();
-        Map<String, Double> averages =
+
+
+         Map<String, Double> averages =
                 TaskService.getInstance().getAllTasksStream()
                         .collect( Collectors.groupingBy(a -> a.getActivity().getName(),
-                                Collectors.averagingDouble(UserActivity::getTimeSpentInHours)));
-
+                                Collectors.averagingInt(UserActivity::getTimeSpentInHours)));
         request.setAttribute("numUsers", countOfUsers);
         request.setAttribute("numActivities", countOfActivities);
         request.setAttribute("numRequestsWaiting", countOfRequestsWaiting);

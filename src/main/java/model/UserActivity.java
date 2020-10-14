@@ -1,8 +1,13 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 /**
  * Model that represents user_activity entity
+ *
  * @Author Yuliia Aleksandrova
  */
 public class UserActivity {
@@ -10,14 +15,14 @@ public class UserActivity {
     private int id;
 
 
-   private int timeSpentInHours;
+    private int timeSpentInHours;
 
 
     private ZonedDateTime finishedOn;
 
     private User user;
-     private Activity activity;
- private Progress progress;
+    private Activity activity;
+    private Progress progress;
 
     public int getId() {
         return id;
@@ -34,8 +39,7 @@ public class UserActivity {
                 ", timeSpentInHours=" + timeSpentInHours +
                 ", finishedOn=" + finishedOn +
                 ", user=" + user +
-                ", activity=" + activity +
-                ", progress=" + progress +
+                ", activity=" + activity.getName() +
                 '}';
     }
 
@@ -53,8 +57,9 @@ public class UserActivity {
         return progress;
     }
 
-    public ZonedDateTime getFinishedOn() {
-        return finishedOn;
+    public Date getFinishedOn() {
+        if(finishedOn==null) return null;
+        return Date.from(finishedOn.toInstant());
     }
 
     public User getUser() {
@@ -80,5 +85,6 @@ public class UserActivity {
     public void setUser(User user) {
         this.user = user;
     }
+
 
 }

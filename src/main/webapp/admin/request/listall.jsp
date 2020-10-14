@@ -62,7 +62,7 @@
   <div class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="mb-1">  <c:out value="${req.status}"></c:out></h5>
-      <small> Created at: <c:out value="${req.createdAt}"></c:out></small>
+      <small> Created at:  <fmt:formatDate type="date" value="${req.createdAt}"/> </small>
     </div>  
 	<p class="mb-1">
 		<a href="<c:url value="controller?command=viewUser"> <c:param name="id" value="${req.user.id}"/></c:url>">

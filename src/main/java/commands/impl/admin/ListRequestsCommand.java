@@ -4,6 +4,7 @@ import commands.util.HttpAction;
 import commands.ICommand;
 import commands.util.PathUtils;
 import model.Request;
+import model.Role;
 import service.RequestService;
 
 import javax.servlet.ServletException;
@@ -31,6 +32,11 @@ public class ListRequestsCommand implements ICommand {
     }
 
     private String doGet(HttpServletRequest request, HttpServletResponse response) {
+        String role =  (String) request.getSession().getAttribute("userRole");
+        if(role == null || Role.valueOf(role.toUpperCase())!= Role.ADMIN){
+            return null;
+        }
+
         PathUtils.saveCurrentPath(request,response);
 
         int page = 1;

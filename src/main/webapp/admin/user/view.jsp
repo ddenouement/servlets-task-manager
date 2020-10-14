@@ -40,36 +40,6 @@
     View User Tasks ->
 </a>
 
-<!--
-   <div class="list-group" style="width: 60%">
-
-  <c:forEach var="req" items="${userRequests}"> 
-  
-  <div class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1"> Status: <c:out value="${req.status.name}"></c:out></h5>
-      <small> at: <c:out value="${req.createdAt}"></c:out></small>
-    </div> 
-	<p class="mb-1"> <c:out value="${req.motif}"></c:out> <c:out value="${req.activity.name}"/>	</p>
-	<c:if test="req.status.name == 'CREATED'">
-		<form id="accept_request" action="controller" method="POST">
-			<input type="hidden" name="command" value="acceptRequest" />
-			<input type="hidden" name="id" value="${req.id}" />
-			<input type="submit" class = "btn btn-success"	value="Accept" />
-		</form>
-		
-		<form id="delete_request" action="controller" method="POST">
-			<input type="hidden" name="command" value="dismissRequest" />
-			<input type="hidden" name="id" value="${req.id}" />
-			<input type="submit" class = "btn btn-danger" value="Dismiss" />
-		</form>
-	</c:if>
-
-	</div>
-  
-  </c:forEach>
-  </div>
-  -->
 
 
 </body>

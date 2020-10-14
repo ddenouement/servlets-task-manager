@@ -1,8 +1,8 @@
 package commands;
 
 import commands.impl.LanguageCommand;
-import commands.impl.ListActivitiesCommand;
-import commands.impl.ViewActivityCommand;
+import commands.impl.common.ListActivitiesCommand;
+import commands.impl.common.ViewActivityCommand;
 import commands.impl.WelcomeCommand;
 import commands.impl.admin.*;
 import commands.impl.auth.*;

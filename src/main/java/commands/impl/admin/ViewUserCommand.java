@@ -45,23 +45,20 @@ public class ViewUserCommand implements ICommand {
             userId = ParameterGetter.getIntParam(request, "id");
         }
         catch (ParameterException e) {
-           request.getSession().setAttribute("errorMessage", "No user found");
-           return PathUtils.getSavedPath(request,response);
+            return null;
         }
 
         if (currentUser != null && currentUser.getRole() == Role.ADMIN) {
                 PathUtils.saveCurrentPath(request, response);
                 Optional<User> user = UserService.getInstance().findUserById(userId);
                 if (!user.isPresent()) {
-                    request.getSession().setAttribute("errorMessage", "No user found");
-                    return PathUtils.getSavedPath(request,response);
+                    return null;
                 }
                 List<Request> requestList = RequestService.getInstance().getRequestsByUserId(userId);
                 request.setAttribute("userview", user.get().getSimpleUserDTO());
                 request.setAttribute("userRequests", requestList);
                 return USER_VIEW_PAGE_JSP;
             }
-        request.setAttribute("errorMessage", "Access was denied");
-        return PathUtils.getSavedPath(request, response);
+        return null;
     }
 }

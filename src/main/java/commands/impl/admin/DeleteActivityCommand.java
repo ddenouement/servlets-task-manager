@@ -5,6 +5,8 @@ import commands.util.HttpAction;
 import commands.util.ParameterException;
 import commands.util.ParameterGetter;
 
+import commands.util.PathUtils;
+import model.Role;
 import service.ActivityService;
 import service.ServiceException;
 import sun.security.validator.ValidatorException;
@@ -30,6 +32,12 @@ public class DeleteActivityCommand implements ICommand {
     }
 
     private String doPost(HttpServletRequest request, HttpServletResponse response) {
+
+        String role =  (String) request.getSession().getAttribute("userRole");
+        if(role==null||Role.valueOf(role.toUpperCase())!= Role.ADMIN){
+            request.getSession().setAttribute("errorMessage", "Access denied");
+            return REDIRECT_ACTIVITIES_LIST_PAGE;
+        }
 
         int activityId =0;
         try {
